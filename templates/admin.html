@@ -1,0 +1,16 @@
+{% extends 'base.html'%} {% block content %}
+<div class="mdl-layout mdl-js-layout color--gray is-small-screen">
+<h3>Admin Page</h3>
+
+{# {{ admin.add_date }} #}
+{{ (admin.add_date.strftime("%d %B %Y")) }}
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+       
+    });
+</script>
+
+{% endblock %}
