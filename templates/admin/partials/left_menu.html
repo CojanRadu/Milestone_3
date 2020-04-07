@@ -1,0 +1,28 @@
+<div class="mdl-layout__drawer">
+    <header>MILESTONE 3</header>
+    <div class="scroll__wrapper" id="scroll__wrapper">
+        <div class="scroller" id="scroller">
+            <div class="scroll__container" id="scroll__container">
+                <!-- left navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link mdl-navigation__link--current left_menu_link" href="{{ url_for('show_settings') }}" >
+                        <i class="material-icons" role="presentation">dashboard</i>
+                        User Settings
+                    </a>
+                    <a class="mdl-navigation__link current left_menu_link" href="{{ url_for('show_users') }}" >
+                        <i class="material-icons">developer_board</i>
+                        Manage Users
+                    </a>
+                    <div class="mdl-layout-spacer"></div>
+                    <hr>
+                    <a class="mdl-navigation__link" href="{{ url_for('login') }}">
+                        <i class="material-icons" role="presentation">link</i>
+                        Go To Login
+                    </a>
+                </nav>
+                <!-- end left navigation -->
+            </div>
+        </div>
+        <div class='scroller__bar' id="scroller__bar"></div>
+    </div>
+</div>

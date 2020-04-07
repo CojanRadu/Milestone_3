@@ -1,0 +1,73 @@
+{% extends 'admin/admin_base.html'%}
+
+{% block content %}
+<div class="mdl-grid ui-tables">
+
+    <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">USERS</h1>
+            </div>
+            <div class="mdl-card__supporting-text no-padding">
+                <table class="mdl-data-table mdl-js-data-table">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">#</th>
+                            <th class="mdl-data-table__cell--non-numeric">Name</th>
+                            <th class="mdl-data-table__cell--non-numeric">Added Date</th>
+                            <th class="mdl-data-table__cell--non-numeric">Last Login</th>
+                            <th class="mdl-data-table__cell--non-numeric">Score</th>
+                            <th class="mdl-data-table__cell--non-numeric">Multiply</th>
+                            <th class="mdl-data-table__cell--non-numeric">Adding</th>
+                            <th class="mdl-data-table__cell--non-numeric">Total Correct</th>
+                            <th class="mdl-data-table__cell--non-numeric">Total Fails</th>
+                            <th class="mdl-data-table__cell--non-numeric">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric">5</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ user.name }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ user.add_date.strftime("%d %B %Y") }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ user.last_login.strftime("%d %B %Y") }}
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">FIX THIS</td>
+                            <td class="mdl-data-table__cell--non-numeric">
+
+                                {% for mult in user.multiply %}
+                                {% if (user.multiply[mult] ) %}
+                                {{ mult }} &nbsp;
+                                {% endif %}
+                                {% endfor %}
+
+
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">English</td>
+                            <td class="mdl-data-table__cell--non-numeric">English</td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric"><button
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
+                                    to cart</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.left_menu_link').toggleClass('mdl-navigation__link--current');
+    })
+
+</script>
+{% endblock %}

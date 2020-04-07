@@ -19,10 +19,23 @@ def login():
     return render_template('login.html')
 
 
+# ADMIN SECTION -----------------------------------------------------------------------------------------------
+admin_user = mongo.db.users.find_one({"name": "admin"})
+
 @app.route('/admin')
 def admin():
-    admin_user = mongo.db.users.find_one({"name": "admin"})
-    return render_template("admin.html", admin=admin_user)
+    return render_template("admin/admin_base.html", admin=admin_user)
+
+@app.route('/show_settings')
+def show_settings():
+    return render_template('admin/admin_show_settings.html', admin=admin_user)
+
+@app.route('/show_users')
+def show_users():
+    all_users = mongo.db.users.find()
+    return render_template('admin/admin_show_users.html', users = all_users)
+
+# END ADMIN SECTION -----------------------------------------------------------------------------------------------
 
 
 @app.route('/exercise/<username>')
@@ -38,7 +51,7 @@ def login_():
     # add here update DB
     
     if (username == 'admin'):
-        return redirect(url_for('admin'))
+        return redirect(url_for('show_settings'))
     else:    
         now =  datetime.now()
 
