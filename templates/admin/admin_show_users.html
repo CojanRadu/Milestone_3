@@ -12,7 +12,7 @@
                 <table class="mdl-data-table mdl-js-data-table">
                     <thead>
                         <tr>
-                            <th class="mdl-data-table__cell--non-numeric">#</th>
+                            <th class="mdl-data-table__cell">#</th>
                             <th class="mdl-data-table__cell--non-numeric">Name</th>
                             <th class="mdl-data-table__cell--non-numeric">Added Date</th>
                             <th class="mdl-data-table__cell--non-numeric">Last Login</th>
@@ -27,7 +27,7 @@
                     <tbody>
                         {% for user in users %}
                         <tr>
-                            <td class="mdl-data-table__cell--non-numeric">5</td>
+                            <td class="mdl-data-table__cell">5</td>
                             <td class="mdl-data-table__cell--non-numeric">{{ user.name }}</td>
                             <td class="mdl-data-table__cell--non-numeric">{{ user.add_date.strftime("%d %B %Y") }}</td>
                             <td class="mdl-data-table__cell--non-numeric">{{ user.last_login.strftime("%d %B %Y") }}
@@ -51,9 +51,34 @@
                                 <span class="label label--mini label__availability background-color--primary"></span>
                                 <span class="label label--mini label__availability background-color--primary"></span>
                             </td>
-                            <td class="mdl-data-table__cell--non-numeric"><button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
-                                    to cart</button></td>
+                            <td class="mdl-data-table__cell--non-numeric">
+
+                                {% if user.name != 'admin' %}
+                                <button
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal"
+                                    id="dialog_{{ user._id }}">Delete</button>
+
+                                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
+                                    for="dialog_{{ user._id }}">
+                                    <li class="mdl-list__item">
+                                        Delete User&nbsp;<strong>{{ user.name }}</strong> ?
+                                    </li>
+
+                                    <li class="mdl-list__item">
+                                        <button
+                                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green">
+                                            <i class="material-icons">reply</i>Cancel</button>
+                                        <div class="ml15"></div>
+                                        <a class="mdl-button  mdl-button--raised  button--colored-red del-user"
+                                            id="{{ user._id }}">
+                                            Delete <i class="material-icons"
+                                                style="margin-left: 15px; margin-right: 0;">forward</i></a>
+
+                                    </li>
+                                </ul>
+                                {% endif %}
+
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -63,10 +88,37 @@
     </div>
 
 </div>
+</script>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.left_menu_link').toggleClass('mdl-navigation__link--current');
+        $('.show-modal').click(function (el) {
+            // console.log(el);
+            // $(this).prop('id', 'more2'); 
+            // $('#changeme').attr('for', $(this).attr('id'));
+            // console.log($(this).attr('id'));
+            // $('#more2_changed').trigger('click');
+        })
+
+        $('.del-user').click(function() {
+            // console.log($(this).attr('id'));
+            $(this).closest("tr")
+                .children('td, th')
+                .animate({ margin: 0, padding: '12px 0px' })
+                .wrapInner('<div />')
+                .children()
+                .slideUp(function () { $(this).closest('tr').remove();
+        });
+
+        $.post("{{ url_for('delete_user') }}", { user_id: $(this).attr('id') })
+            .done(function (data) {
+                //  alert("Response Was: " + data);
+            });
+
+    })
     })
 
 </script>

@@ -35,6 +35,11 @@ def show_users():
     all_users = mongo.db.users.find()
     return render_template('admin/admin_show_users.html', users = all_users)
 
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    # return '<h1>DELETED ' + request.form['user_id'] + ' !</h1>'    
+    mongo.db.users.remove({'_id': ObjectId(request.form['user_id'])})
+    
 # END ADMIN SECTION -----------------------------------------------------------------------------------------------
 
 
