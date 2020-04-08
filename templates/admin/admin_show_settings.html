@@ -1,125 +1,214 @@
 {% extends 'admin/admin_base.html'%}
 
 {% block content %}
+
 <div class="mdl-grid ui-tables">
 
     <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
         <div class="mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">Default Settings</h1>
+                <h1 class="mdl-card__title-text">Multiply Settings - <strong>&nbsp;{{ user.name }}</strong></h1>
+
             </div>
             <div class="mdl-card__supporting-text no-padding">
-                <table class="mdl-data-table mdl-js-data-table">
-                    <thead>
-                        <tr>
-                            <th class="mdl-data-table__cell--non-numeric">#</th>
-                            <th class="mdl-data-table__cell--non-numeric">Book title</th>
-                            <th class="mdl-data-table__cell--non-numeric">Author</th>
-                            <th class="mdl-data-table__cell--non-numeric">Genre</th>
-                            <th class="mdl-data-table__cell--non-numeric">Year</th>
-                            <th class="mdl-data-table__cell--non-numeric">Originally published</th>
-                            <th class="mdl-data-table__cell--non-numeric">Language</th>
-                            <th class="mdl-data-table__cell--non-numeric">Original Language</th>
-                            <th class="mdl-data-table__cell--non-numeric">Availability</th>
-                            <th class="mdl-data-table__cell--non-numeric"> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">5</td>
-                            <td class="mdl-data-table__cell--non-numeric">Life of Pi</td>
-                            <td class="mdl-data-table__cell--non-numeric">Yann Martel</td>
-                            <td class="mdl-data-table__cell--non-numeric"><span
-                                    class="label label--mini color--green">Fiction</span> </td>
-                            <td class="mdl-data-table__cell--non-numeric">2016</td>
-                            <td class="mdl-data-table__cell--non-numeric">2001</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span
-                                    class="label label--mini label__availability background-color--primary"></span>
-                                <span
-                                    class="label label--mini label__availability background-color--primary"></span>
-                                <span
-                                    class="label label--mini label__availability background-color--primary"></span>
-                                <span
-                                    class="label label--mini label__availability background-color--primary"></span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric"><button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
-                                    to cart</button></td>
-                        </tr>
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">6</td>
-                            <td class="mdl-data-table__cell--non-numeric">The secret Garden</td>
-                            <td class="mdl-data-table__cell--non-numeric">Frances Hodgson Burnett</td>
-                            <td class="mdl-data-table__cell--non-numeric"><span
-                                    class="label label--mini color--orange">Childeren's literature</span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric">2017</td>
-                            <td class="mdl-data-table__cell--non-numeric">1911</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span
-                                    class="label label--mini label__availability background-color--secondary"></span>
-                                <span class="label label--mini label__availability "></span>
-                                <span class="label label--mini label__availability "></span>
-                                <span class="label label--mini label__availability "></span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric"><button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
-                                    to cart</button></td>
-                        </tr>
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">7</td>
-                            <td class="mdl-data-table__cell--non-numeric">Rebecca</td>
-                            <td class="mdl-data-table__cell--non-numeric">Daphne du Maurier</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span class="label label--mini color--purple">Gothic fiction</span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric">2016</td>
-                            <td class="mdl-data-table__cell--non-numeric">1938</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span class="label label--mini label__availability color--orange"></span>
-                                <span class="label label--mini label__availability color--orange"></span>
-                                <span class="label label--mini label__availability"></span>
-                                <span class="label label--mini label__availability"></span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric"><button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
-                                    to cart</button></td>
-                        </tr>
-                        <tr>
-                            <td class="mdl-data-table__cell--non-numeric">8</td>
-                            <td class="mdl-data-table__cell--non-numeric">Dracula</td>
-                            <td class="mdl-data-table__cell--non-numeric">Bram Stoker</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span class="label label--mini color--purple">Gothic fiction</span>
-                                <span class="label label--mini color--dark-gray">Horror fiction</span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric">2015</td>
-                            <td class="mdl-data-table__cell--non-numeric">1897</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">
-                                <span class="label label--mini label__availability"></span>
-                                <span class="label label--mini label__availability"></span>
-                                <span class="label label--mini label__availability"></span>
-                                <span class="label label--mini label__availability"></span>
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric"><button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal">Add
-                                    to cart</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <form method="POST" action="{{ url_for('update_settings') }}" name="update_form" id="update_form">
+                    <table class="mdl-data-table mdl-js-data-table">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">&nbsp;
+                                    <input type="hidden" value="{{ user._id }}" name="user_id" id="user_id">
+                                    <input type="hidden" value="{{ user.name }}" name="user_name" id="user_name">
+                                </th>
+                                <th class="mdl-data-table__cell--non-numeric" colspan="2">Enabled</th>
+                                <th class="mdl-data-table__cell--non-numeric" colspan="2">Can be Inverted</th>
+                                <th class="mdl-data-table__cell--non-numeric" colspan="5">Answer Type</th>
+                                <th class="mdl-data-table__cell--non-numeric" colspan="4">Nr Of Exercises (0=infinite)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">&nbsp;</td>
+                                <td class="mdl-data-table__cell--non-numeric" colspan="2">
+                                    <label
+                                        class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-red mdl-js-ripple-effect"
+                                        for="switch-enabled">
+                                        <input type="checkbox" id="switch-enabled" class="mdl-switch__input"
+                                            name="enabled" {% if user.mult_opt_enabled %} checked="" {% endif %}>
+
+                                        <div class="mdl-switch__track"></div>
+                                        <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                        </div>
+                                        <span
+                                            class="mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple is-animating"
+                                                style="width: 137.765px; height: 137.765px; transform: translate(-50%, -50%) translate(24px, 24px);"></span>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric" colspan="2">
+                                    <label
+                                        class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
+                                        for="switch-inverted">
+                                        <input type="checkbox" id="switch-inverted" class="mdl-switch__input"
+                                            name="inverted" {% if user.mult_opt_can_be_inverted %} checked=""
+                                            {% endif %}>
+                                        <div class="mdl-switch__track"></div>
+                                        <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                        </div>
+                                        <span
+                                            class="mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple is-animating"
+                                                style="width: 137.765px; height: 137.765px; transform: translate(-50%, -50%) translate(24px, 24px);"></span>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric" colspan="5">
+                                    <label
+                                        class="mdl-radio mdl-js-radio mdl-js-ripple-effect radio--colored-orange mdl-js-ripple is-checked"
+                                        for="option-1">
+                                        <input type="radio" id="option-1" class="mdl-radio__button" name="mult_opt"
+                                            value="1" {% if (user.mult_opt_answer_type == 1) %} checked="" {% endif %}>
+                                        <span class="mdl-radio__label">InputBox</span>
+                                        <span class="mdl-radio__outer-circle"></span><span
+                                            class="mdl-radio__inner-circle"></span><span
+                                            class="mdl-radio__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple"></span>
+                                        </span>
+                                    </label>
+                                    <span class="ml15"></span>
+                                    <label
+                                        class="mdl-radio mdl-js-radio mdl-js-ripple-effect radio--colored-orange mdl-js-ripple is-checked"
+                                        for="option-2">
+                                        <input type="radio" id="option-2" class="mdl-radio__button" name="mult_opt"
+                                            value="3" {% if user.mult_opt_answer_type == 3 %} checked="" {% endif %}>
+                                        <span class="mdl-radio__label">3 Options</span>
+                                        <span class="mdl-radio__outer-circle"></span><span
+                                            class="mdl-radio__inner-circle"></span><span
+                                            class="mdl-radio__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple"></span>
+                                        </span>
+                                    </label>
+                                    <span class="ml15"></span>
+                                    <label
+                                        class="mdl-radio mdl-js-radio mdl-js-ripple-effect radio--colored-orange mdl-js-ripple is-checked"
+                                        for="option-3">
+                                        <input type="radio" id="option-3" class="mdl-radio__button" name="mult_opt"
+                                            value="5" {% if user.mult_opt_answer_type == 5 %} checked="" {% endif %}>
+                                        <span class="mdl-radio__label">5 Options</span>
+                                        <span class="mdl-radio__outer-circle"></span><span
+                                            class="mdl-radio__inner-circle"></span><span
+                                            class="mdl-radio__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple"></span>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric" colspan="4">
+                                    <p style="width: 200px; margin-bottom: -5px;">
+                                        <input class="mdl-slider mdl-js-slider slider--colored-orange" type="range"
+                                            min="0" max="100" value="{{ user.mult_opt_exercise_nr }}" tabindex="0"
+                                            id="slider-tool" name="ex_nr">
+
+
+                                    </p><span class="mdl-badge badge--colored-orange" id="badge1"
+                                        data-badge="{{ user.mult_opt_exercise_nr }}"
+                                        style="float: left; margin: 0px 0px 10px 250px;"></span>
+                                    <span class="mdl-tooltip mdl-tooltip--large" for="slider-tool"
+                                        id="tooltip">{{ user.mult_opt_exercise_nr }}</span>
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric"><strong>Nr:</strong></td>
+                                {% for nr in user.mult_opt_nr %}
+                                <td class="mdl-data-table__cell--non-numeric"><strong>{{ nr }}</strong></td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">&nbsp;</td>
+                                {% for nr in user.mult_opt_nr %}
+                                <td class="mdl-data-table__cell--non-numeric">
+
+                                    <label
+                                        class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-green mdl-js-ripple-effect"
+                                        for="switch-{{ nr }}">
+                                        <input type="checkbox" id="switch-{{ nr }}" name="switch-{{ nr }}"
+                                            class="mdl-switch__input" {% if user.mult_opt_nr[nr] %} checked=""
+                                            {% endif %} value="on">
+
+                                        <div class="mdl-switch__track"></div>
+                                        <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                        </div>
+                                        <span
+                                            class="mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center">
+                                            <span class="mdl-ripple is-animating"
+                                                style="width: 137.765px; height: 137.765px; transform: translate(-50%, -50%) translate(24px, 24px);"></span>
+                                        </span>
+                                    </label>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td colspan="14" style="text-align: center;">
+                                    <button
+                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green"
+                                        id="update-form">
+                                        <i class="material-icons">create</i>
+                                        Save Settings
+                                        <span class="mdl-button__ripple-container">
+                                            <span class="mdl-ripple"></span>
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
 
 </div>
+<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    const slider = document.querySelector('#slider-tool');
+    slider.addEventListener("input", function () {
+        document.getElementById("tooltip").textContent = slider.value;
+        document.getElementById("badge1").setAttribute('data-badge', slider.value);
+
+    }, false);
+
+
+    (function () {
+        'use strict';
+        window['counter'] = 0;
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        var showToastButton = document.querySelector('#update-form');
+        showToastButton.addEventListener('click', function (event) {
+            'use strict';
+            var data = { message: 'Update Settings {{ user.name }} - times (' + ++counter + ')' };
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
+            var str = $("#update_form").serialize();
+            event.preventDefault();
+            console.log(str);
+            $.post("{{ url_for('update_settings') }}", { str })
+                .done(function (data) {
+                    console.log("Response Was: " + data);
+                });
+        });
+    }());
+
+</script>
+
+
+<script>
+
+</script>
 {% endblock %}

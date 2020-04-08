@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Milestone 3</title>
 
+    <title>Milestone 3</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900" rel="stylesheet"
         type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -22,60 +23,6 @@
         {% include('admin/partials/top_menu.html') %}
 
         {% include('admin/partials/left_menu.html') %}
-
-
-        
-
-        <!-- <button type="button" class="mdl-button show-modal">Show Modal</button>
-       <div class="mdl-dialog " style="z-index: 5; visibility: hidden;">
-         
-            <div class="mdl-layout mdl-js-layout color--gray is-small-screen login">
-               
-                <div class="mdl-card mdl-card__login mdl-shadow--2dp">
-                    <div class="mdl-card__supporting-text color--dark-gray">
-                        <div class="mdl-grid">
-                            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                                <span class="mdl-card__title-text text-color--smooth-gray">DARKBOARD</span>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                                <span class="login-name text-color--white">Forgot password?</span>
-                                <span class="login-secondary-text text-color--smoke">Enter your email below to recieve your password</span>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-                                    <input class="mdl-textfield__input" type="text" id="e-mail">
-                                    <label class="mdl-textfield__label" for="e-mail">Email</label>
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
-                                <div class="mdl-layout-spacer"></div>
-                                <a href="index.html">
-                                    <buttons class="mdl-button mdl-js-button mdl-button--raised color--light-blue">
-                                        SEND PASSWORD
-                                    </buttons>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-         
-        </div> -->
-        <script>
-            var dialog = document.querySelector('dialog');
-        //  var showModalButton = document.querySelector('.show-modal');
-        //  if (! dialog.showModal) {
-        //    dialogPolyfill.registerDialog(dialog);
-        //  }
-        //  showModalButton.addEventListener('click', function() {
-        //    dialog.showModal();
-        //  });
-        //  dialog.querySelector('.close').addEventListener('click', function() {
-        //    dialog.close();
-        //  });
-        </script>
-
 
 
         <main class="mdl-layout__content ">
