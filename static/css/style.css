@@ -35,3 +35,7 @@
 .undo {
     top:-4px;
 }
+.badge-slider {
+    float: left; margin: -4px 0px 4px 141px;
+    z-index: 10;
+}

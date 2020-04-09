@@ -2,8 +2,6 @@
 
 {% block content %}
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
-    <h3>Exercise</h3>
-
 
     <h4>Is new user: {{ session['u_new'] }} </h4>
 
@@ -27,7 +25,7 @@
                     <form action="#" name="ex_form" id="ex_form" method="POST">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
-                                id="answer" name="answer" autofocus placeholder="{{ curr_exercise[2] }}" >
+                                id="answer" name="answer" autofocus placeholder="{{ curr_exercise[2] }}" readonly>
                             <label class="mdl-textfield__label" for="answer"><span
                                     class="ex_0">{{ curr_exercise[0] }}</span><i
                                     class="material-icons operation-icon-small">clear</i><span
@@ -100,7 +98,16 @@
             $(".keypad").click(function () {
                 let val = $(this).attr('data-nr');
                 if ($.isNumeric(val)) {
-                    $('#answer').val($('#answer').val() + val);
+                    let new_val = $('#answer').val() + val;
+                    {% if user.mult_opt_auto_submit %}
+                    if ($('#correct_answer').val() == new_val) {
+                            console.log('correct');
+                            submit_form();
+                        }
+                    {% endif %}
+                    $('#answer').val(new_val);
+                    
+
                 }
                 else if (val == 'ok') {
                     submit_form();
@@ -143,16 +150,22 @@
                 get_new_exercise();
                 $("#answer").focus();
             } else {
-                console.log('show error');
-                // var validator = $('#ex_form').validate();
-                // validator.showErrors({
-                // 'answer': 'my custom error message'
-            // });
-            $("input").prop('required',true);
-            let form = document.querySelector('form');
-            form.reportValidity();
+
+                //HACK for not triggering keyboard on tablet
+                //and to show built-in HTML validator mressage
+                //will not work on older browsers    
+
+                $("#answer").prop('required', true);
+                $("#answer").prop('readonly', false);
+                let form = document.querySelector('form');
+                form.reportValidity();
+
+                setTimeout(function () { $("input").prop('readonly', true); }, 1000);
             }
         }
+
+        
+
 
         $('#submit_form').click(function () {
 

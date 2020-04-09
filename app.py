@@ -18,8 +18,10 @@ app.secret_key = "randstring12345"
 mongo = PyMongo(app)
 
 # HELPERS ----------------------------------------------------------------------------------------------------
+
+
 def make_exercise(action, user):
-    
+
     use_nr = []
     # print(str(user['mult_opt_nr']))
     for nr in user['mult_opt_nr']:
@@ -31,15 +33,16 @@ def make_exercise(action, user):
     b = random.randint(1, 12)
 
     if user['mult_opt_can_be_inverted']:
-        x = random.randint(0,1)
+        x = random.randint(0, 1)
         if x:
-            c=b
-            b=a
-            a=c
+            c = b
+            b = a
+            a = c
 
     c = int(a)*int(b)
-    mult_tuple = [int(a), int(b), c] if action == 'multiply' else [4,5,6]
+    mult_tuple = [int(a), int(b), c] if action == 'multiply' else [4, 5, 6]
     return mult_tuple
+
 
 @app.route('/get_exercise')
 def get_exercise():
@@ -50,9 +53,15 @@ def get_exercise():
 
 @app.route('/submit_answer', methods=['POST', 'GET'])
 def submit_answer():
+    my_dict = urllib.parse.parse_qs(request.form['str'])
+    print(str(my_dict))
+    exercise_doc = {'user_name': session["u_name"], 'date': datetime.now(
+    ), 'type': 'multiply', 'nr_1': 1, 'nr_2': 2, 'nr_3': 3, 'answer': 4, 'is_correct': True, 'nr_of_tries': 1, 'session': "aaa"}
+    mongo.db.exercise.insert_one(exercise_doc)
     return 'Answer was submitted'
 
-# END HElpers -------------------------------------------------------------------------------------------------    
+# END HElpers -------------------------------------------------------------------------------------------------
+
 
 @app.route('/')
 def login():
@@ -94,28 +103,34 @@ def delete_user():
 @app.route('/update_settings', methods=['POST', 'GET'])
 def update_settings():
 
-    my_dict = urllib.parse.parse_qs(
-        request.form['str'], keep_blank_values=True)
+    print(str(request.form))
+    my_dict = urllib.parse.parse_qs(request.form['str'])
 
+    """ form doesn't send any values, have to manually add """
     my_dict.setdefault('enabled', '[off]')
     my_dict.setdefault('inverted', '[off]')
+    my_dict.setdefault('show_hint', '[off]')
+    my_dict.setdefault('auto_submit', '[off]')
+    my_dict.setdefault('mult_retry_opt', "['1']")
 
     user = admin_user if str(my_dict['user_name']) == "['admin']" else mongo.db.users.find_one(
         {"_id": ObjectId(tuple(my_dict['user_id'])[0])})
 
     for i in range(13):
         my_dict.setdefault('switch-'+str(i), '[off]')
-        user['mult_opt_nr'][str(i)] = True if str(
-            my_dict['switch-'+str(i)]) == "['on']" else False
-    user['mult_opt_enabled'] = True if str(
-        my_dict['enabled']) == "['on']" else False
-    user['mult_opt_can_be_inverted'] = True if str(
-        my_dict['inverted']) == "['on']" else False
+        user['mult_opt_nr'][str(i)] = True if str(my_dict['switch-'+str(i)]) == "['on']" else False
+
+    user['mult_opt_enabled'] = True if str(my_dict['enabled']) == "['on']" else False
+    user['mult_opt_can_be_inverted'] = True if str(my_dict['inverted']) == "['on']" else False
+    user['mult_opt_show_hint'] = True if str(my_dict['show_hint']) == "['on']" else False
+    user['mult_opt_auto_submit'] = True if str(my_dict['auto_submit']) == "['on']" else False
 
     """" Have to update rest or wont refresh TODO  find a solution """
+    """ Maybe fetch user again """
 
     user['mult_opt_answer_type'] = int(tuple(my_dict['mult_opt'])[0])
     user['mult_opt_exercise_nr'] = int(tuple(my_dict['ex_nr'])[0])
+    user['mult_opt_retry_nr'] = int(tuple(my_dict['mult_retry_opt'])[0])
 
     # print (str(user_name))
     # print (str(my_dict))
@@ -123,29 +138,32 @@ def update_settings():
     myquery = {'_id': user['_id']}
 
     newvalues = {"$set": {'mult_opt_enabled': user['mult_opt_enabled'],
-                        'mult_opt_can_be_inverted': user['mult_opt_can_be_inverted'],
-                        'mult_opt_answer_type': user['mult_opt_answer_type'],
-                        'mult_opt_exercise_nr': user['mult_opt_exercise_nr'],
-                        "mult_opt_nr.0": user['mult_opt_nr']['0'],
-                        "mult_opt_nr.1": user['mult_opt_nr']['1'],
-                        "mult_opt_nr.2": user['mult_opt_nr']['2'],
-                        "mult_opt_nr.3": user['mult_opt_nr']['3'],
-                        "mult_opt_nr.4": user['mult_opt_nr']['4'],
-                        "mult_opt_nr.5": user['mult_opt_nr']['5'],
-                        "mult_opt_nr.6": user['mult_opt_nr']['6'],
-                        "mult_opt_nr.7": user['mult_opt_nr']['7'],
-                        "mult_opt_nr.8": user['mult_opt_nr']['8'],
-                        "mult_opt_nr.9": user['mult_opt_nr']['9'],
-                        "mult_opt_nr.10": user['mult_opt_nr']['10'],
-                        "mult_opt_nr.11": user['mult_opt_nr']['11'],
-                        "mult_opt_nr.12": user['mult_opt_nr']['12']
-                }}
+                          'mult_opt_can_be_inverted': user['mult_opt_can_be_inverted'],
+                          'mult_opt_answer_type': user['mult_opt_answer_type'],
+                          'mult_opt_exercise_nr': user['mult_opt_exercise_nr'],
+                          'mult_opt_retry_nr': user['mult_opt_retry_nr'],
+                          'mult_opt_show_hint': user['mult_opt_show_hint'],
+                          'mult_opt_auto_submit': user['mult_opt_auto_submit'],
+                          "mult_opt_nr.0": user['mult_opt_nr']['0'],
+                          "mult_opt_nr.1": user['mult_opt_nr']['1'],
+                          "mult_opt_nr.2": user['mult_opt_nr']['2'],
+                          "mult_opt_nr.3": user['mult_opt_nr']['3'],
+                          "mult_opt_nr.4": user['mult_opt_nr']['4'],
+                          "mult_opt_nr.5": user['mult_opt_nr']['5'],
+                          "mult_opt_nr.6": user['mult_opt_nr']['6'],
+                          "mult_opt_nr.7": user['mult_opt_nr']['7'],
+                          "mult_opt_nr.8": user['mult_opt_nr']['8'],
+                          "mult_opt_nr.9": user['mult_opt_nr']['9'],
+                          "mult_opt_nr.10": user['mult_opt_nr']['10'],
+                          "mult_opt_nr.11": user['mult_opt_nr']['11'],
+                          "mult_opt_nr.12": user['mult_opt_nr']['12']
+                          }}
 
     mongo.db.users.update_one(myquery, newvalues)
 
     # return  str(user['mult_opt_nr']) + '\n' + str(newvalues)
-    return None
-    
+    return '--pdate'
+
 # END ADMIN SECTION -----------------------------------------------------------------------------------------------
 
 # User ---- SECTION -----------------------------------------------------------------------------------------------
@@ -160,13 +178,13 @@ def exercise(username):
 def login_():
     username = request.form.get('user_name').lower()
     session["u_name"] = username
-    
+
     if (username == 'admin'):
         return redirect(url_for('show_settings'))
-    else:    
-        now =  datetime.now()
+    else:
+        now = datetime.now()
 
-        if (mongo.db.users.count({ 'name': username }, limit = 1) == 0):
+        if (mongo.db.users.count({'name': username}, limit=1) == 0):
             """ DUPLICATE admin current settings when creating a new user """
             admin_user = mongo.db.users.find_one({"name": "admin"})
             admin_user['_id'] = ObjectId()
@@ -180,7 +198,7 @@ def login_():
             user['last_login'] = now
 
             myquery = {'_id': user['_id']}
-            newvalues = { "$set": {'last_login': now}}
+            newvalues = {"$set": {'last_login': now}}
 
             mongo.db.users.update_one(myquery, newvalues)
             insert_id = user['_id']
@@ -190,6 +208,7 @@ def login_():
         return redirect(url_for('exercise', username=username))
     # return '<h1>LOGIN</h1>'
 # END User SECTION -----------------------------------------------------------------------------------------------
+
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
