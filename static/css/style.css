@@ -1,0 +1,37 @@
+.operation-icon {
+    font-size: 50px;
+    top: 8px;
+    position: relative;
+}
+
+#answer {
+    font-size: 50px;
+    text-align: center;
+}
+
+.operation-icon-small {
+    font-size: 10px;
+}
+
+.mdl-card__title {
+    height: auto !important;
+}
+
+.mdl-cell
+{
+    min-width: 400px;
+}
+.grid {
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.keypad{
+    font-size: 50px;
+    padding: 20px;
+}
+
+.undo {
+    top:-4px;
+}

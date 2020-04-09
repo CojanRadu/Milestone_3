@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Milestone 3</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900" rel="stylesheet"
+        type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- inject:css -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/getmdl-select.min.css')}}">
@@ -17,27 +18,16 @@
 </head>
 
 <body>
-   
-        {% block content %} {% endblock %}
-  
 
-<!-- inject:js -->
-<script src="{{url_for('static', filename='js/d3.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/getmdl-select.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/material.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/nv.d3.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/layout/layout.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/scroll/scroll.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/charts/discreteBarChart.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/charts/linePlusBarChart.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/charts/stackedBarChart.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/employer-form/employer-form.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/line-chart/line-charts-nvd3.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/map/maps.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/pie-chart/pie-charts-nvd3.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/table/table.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/widgets/todo/todo.min.js')}}"></script>
-<!-- endinject -->
+    {% block content %} {% endblock %}
+
+
+    <script src="{{url_for('static', filename='js/d3.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/getmdl-select.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/material.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/nv.d3.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/layout/layout.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/scroll/scroll.min.js')}}"></script>
 </body>
 
 </html>

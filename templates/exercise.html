@@ -2,6 +2,161 @@
 
 {% block content %}
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
-<h3>Exercise {{id}}</h3>
-</div>
-{% endblock %}
+    <h3>Exercise</h3>
+
+
+    <h4>Is new user: {{ session['u_new'] }} </h4>
+
+    <div class="mdl-grid ui-cards">
+        <div class="mdl-cell mdl-cell--2-col-phone">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">TITLE</h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-card--expand">
+                    <small>small text</small>
+                    regular text
+                    <br><br>
+                    <b>etc</b>
+                    {% set curr_exercise = make_exercise('multiply', user) %}
+                    <h2 style="text-align: center;">
+                        <span class="ex_0">{{ curr_exercise[0] }}</span>
+                        <i class="material-icons operation-icon">clear</i>
+                        <span class="ex_1">{{ curr_exercise[1] }}</span></h2>
+
+                    <form action="#" name="ex_form" id="ex_form" method="POST">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
+                                id="answer" name="answer" autofocus placeholder="{{ curr_exercise[2] }}" >
+                            <label class="mdl-textfield__label" for="answer"><span
+                                    class="ex_0">{{ curr_exercise[0] }}</span><i
+                                    class="material-icons operation-icon-small">clear</i><span
+                                    class="ex_1">{{ curr_exercise[1] }}</span> =
+                            </label>
+                            <span class="mdl-textfield__error">Input is not a number!</span>
+                        </div>
+                        <input type="hidden" name="correct_answer" id="correct_answer" value="{{ curr_exercise[2] }}"
+                            class="ex_2">
+                    </form>
+
+
+                </div>
+                <div class="mdl-card__actions">
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green "
+                        id="submit_form">
+                        Get a Unicorn Coin
+                    </a>
+                </div>
+
+                <div class="mdl-card__menu">
+                    add badge here
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col-phone">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">TITLE</h2>
+                </div>
+                <div class="mdl-card__supporting-text mdl-card--expand">
+                    <div class="grid">
+                        {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
+                        {% for b_nr in all_buttons %}
+                        <div class="cell">
+
+                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect 
+                            {% if (b_nr == 'ok') %} 
+                                button--colored-green
+                                {% else %}
+                                    {% if (b_nr == 'undo') %} 
+                                        button--colored-red 
+                                        {% else %}
+                                        button--colored-light-blue
+                                    {% endif %}
+                                
+                            {% endif %}    
+
+                            
+                            keypad" data-nr="{{ b_nr }}">
+                                {% if b_nr != 'undo' %} {{ b_nr }}
+                                {% else  %} <i class="material-icons operation-icon undo">undo</i>
+                                {% endif %}
+                            </a>
+
+                        </div>
+
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".keypad").click(function () {
+                let val = $(this).attr('data-nr');
+                if ($.isNumeric(val)) {
+                    $('#answer').val($('#answer').val() + val);
+                }
+                else if (val == 'ok') {
+                    submit_form();
+                }
+                else {
+                    var str = $('#answer').val();
+                    var res = str.substring(0, str.length - 1);
+                    $('#answer').val(res);
+                }
+                $("#answer").focus();
+            })
+        });
+
+        function get_new_exercise() {
+            $.get("{{ url_for('get_exercise') }}", function (data) {
+                let response = jQuery.parseJSON(data)
+                // $('#answer').val(response[0]);
+                $('.ex_0').html(response[0]);
+                $('.ex_1').html(response[1]);
+                $('#answer').val('');
+                // $('.ex_2').val(response[2]);
+                $('.ex_2').attr("placeholder", response[2]);
+            });
+        }
+
+        function submit_answer() {
+
+            var str = $("#ex_form").serialize();
+            event.preventDefault();
+            console.log(str);
+            $.post("{{ url_for('submit_answer') }}", { str })
+                .done(function (data) {
+                    console.log("Response Was: " + data);
+                });
+        }
+
+        function submit_form() {
+            if ($.isNumeric($("#answer").val())) {
+                submit_answer();
+                get_new_exercise();
+                $("#answer").focus();
+            } else {
+                console.log('show error');
+                // var validator = $('#ex_form').validate();
+                // validator.showErrors({
+                // 'answer': 'my custom error message'
+            // });
+            $("input").prop('required',true);
+            let form = document.querySelector('form');
+            form.reportValidity();
+            }
+        }
+
+        $('#submit_form').click(function () {
+
+            submit_form();
+        });
+    </script>
+    {% endblock %}

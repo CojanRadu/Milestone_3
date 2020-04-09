@@ -9476,17 +9476,16 @@ a {
 .ui-cards .mdl-cell:nth-last-of-type(3) .mdl-card__title .mdl-card__title-text {
     font-size: 40px
 }
-
 .ui-cards .mdl-cell:nth-last-of-type(1) .mdl-card__title {
-    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4)), url(../images/sao_paulo.jpg)
+    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4))
 }
 
 .ui-cards .mdl-cell:nth-last-of-type(2) .mdl-card__title {
-    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4)), url(../images/tokyo.jpg)
+    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4))
 }
 
 .ui-cards .mdl-cell:nth-last-of-type(3) .mdl-card__title {
-    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4)), url(../images/istanbul.jpg)
+    background-image: linear-gradient(transparent, transparent, transparent, transparent, transparent, rgba(0, 0, 0, .1), rgba(0, 0, 0, .2), rgba(0, 0, 0, .4))
 }
 
 .ui-cards small {

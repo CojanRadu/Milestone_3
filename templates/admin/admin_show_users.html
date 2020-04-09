@@ -54,12 +54,12 @@
                             <td class="mdl-data-table__cell--non-numeric">
 
                                 {% if user.name != 'admin' %}
-                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green" href="{{ url_for('edit_user_settings', user_id=user._id) }}">
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal" href="{{ url_for('edit_user_settings', user_id=user._id) }}">
                                     Edit Settings
                                 </a>
                                   <span class="ml15"></span>
                                 <button
-                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal"
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
                                     id="dialog_{{ user._id }}">Delete</button>
 
                                 <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"

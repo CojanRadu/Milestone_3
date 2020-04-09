@@ -1,4 +1,6 @@
 import os
+import random
+import json
 from flask import Flask, render_template, redirect, session, url_for, request
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -15,6 +17,42 @@ app.secret_key = "randstring12345"
 
 mongo = PyMongo(app)
 
+# HELPERS ----------------------------------------------------------------------------------------------------
+def make_exercise(action, user):
+    
+    use_nr = []
+    # print(str(user['mult_opt_nr']))
+    for nr in user['mult_opt_nr']:
+        if (user['mult_opt_nr'][nr]):
+            use_nr.append(nr)
+
+    a_temp = random.randint(0, len(use_nr)-1)
+    a = use_nr[a_temp]
+    b = random.randint(1, 12)
+
+    if user['mult_opt_can_be_inverted']:
+        x = random.randint(0,1)
+        if x:
+            c=b
+            b=a
+            a=c
+
+    c = int(a)*int(b)
+    mult_tuple = [int(a), int(b), c] if action == 'multiply' else [4,5,6]
+    return mult_tuple
+
+@app.route('/get_exercise')
+def get_exercise():
+    user = mongo.db.users.find_one({"_id": ObjectId(session['u_id'])})
+    a = make_exercise('multiply', user)
+    return json.dumps(a)
+
+
+@app.route('/submit_answer', methods=['POST', 'GET'])
+def submit_answer():
+    return 'Answer was submitted'
+
+# END HElpers -------------------------------------------------------------------------------------------------    
 
 @app.route('/')
 def login():
@@ -110,18 +148,18 @@ def update_settings():
     
 # END ADMIN SECTION -----------------------------------------------------------------------------------------------
 
-
+# User ---- SECTION -----------------------------------------------------------------------------------------------
 @app.route('/exercise/<username>')
 def exercise(username):
     # return '<h1>' + username + '</h1>'
-    return render_template('exercise.html', username=username)
+    user = mongo.db.users.find_one({"_id": ObjectId(session['u_id'])})
+    return render_template('exercise.html', user=user, make_exercise=make_exercise)
 
 
 @app.route('/login_', methods=['POST'])
 def login_():
     username = request.form.get('user_name').lower()
-    session["username"] = username
-    # add here update DB
+    session["u_name"] = username
     
     if (username == 'admin'):
         return redirect(url_for('show_settings'))
@@ -136,6 +174,7 @@ def login_():
             admin_user['add_date'] = now
             admin_user['last_login'] = now
             insert_id = mongo.db.users.insert_one(admin_user).inserted_id
+            session["u_new"] = True
         else:
             user = mongo.db.users.find_one({"name": username})
             user['last_login'] = now
@@ -146,9 +185,11 @@ def login_():
             mongo.db.users.update_one(myquery, newvalues)
             insert_id = user['_id']
 
-        return redirect(url_for('exercise', username=username, id = insert_id))
+        # return redirect(url_for('exercise', username=username, id = insert_id))
+        session["u_id"] = str(insert_id)
+        return redirect(url_for('exercise', username=username))
     # return '<h1>LOGIN</h1>'
-
+# END User SECTION -----------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
