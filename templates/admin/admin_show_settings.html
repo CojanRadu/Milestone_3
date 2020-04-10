@@ -20,6 +20,7 @@
                                     <input type="hidden" value="{{ user._id }}" name="user_id" id="user_id">
                                     <input type="hidden" value="{{ user.name }}" name="user_name" id="user_name">
                                     Enabled</th>
+                                <th class="mdl-data-table__cell--non-numeric">Show Answer</th>
                                 <th class="mdl-data-table__cell--non-numeric">Can be Inverted</th>
                                 <th class="mdl-data-table__cell--non-numeric">Answer Type</th>
                                 <th class="mdl-data-table__cell--non-numeric">Nr of retries</th>
@@ -37,9 +38,20 @@
                                         for="switch-enabled">
                                         <input type="checkbox" id="switch-enabled" class="mdl-switch__input"
                                             name="enabled" {% if user.mult_opt_enabled %} checked="" {% endif %}>
-
                                         <div class="mdl-switch__track"></div>
                                         <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                    </label>
+                                </td>
+                                <td class="mdl-data-table__cell--non-numeric">
+                                    <label
+                                        class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
+                                        for="show_answer">
+                                        <input type="checkbox" id="show_answer" class="mdl-switch__input"
+                                            name="show_answer" {% if user.mult_opt_show_answer %} checked=""
+                                            {% endif %}>
+                                        <div class="mdl-switch__track"></div>
+                                        <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                        </div>
                                     </label>
                                 </td>
                                 <td class="mdl-data-table__cell--non-numeric">
@@ -123,14 +135,15 @@
                                 </td>
                                 <td class="mdl-data-table__cell--non-numeric">
                                     <label
-                                    class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-red mdl-js-ripple-effect"
-                                    for="auto_submit">
-                                    <input type="checkbox" id="auto_submit" class="mdl-switch__input" name="auto_submit"
-                                        {% if user.mult_opt_auto_submit %} checked="" {% endif %}>
+                                        class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-red mdl-js-ripple-effect"
+                                        for="auto_submit">
+                                        <input type="checkbox" id="auto_submit" class="mdl-switch__input"
+                                            name="auto_submit" {% if user.mult_opt_auto_submit %} checked=""
+                                            {% endif %}>
 
-                                    <div class="mdl-switch__track"></div>
-                                    <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
-                                </label>
+                                        <div class="mdl-switch__track"></div>
+                                        <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
+                                    </label>
 
                                 </td>
 

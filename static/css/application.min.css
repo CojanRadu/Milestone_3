@@ -7173,7 +7173,7 @@ main {
 
 .mdl-layout__drawer header {
     text-align: center;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     color: #fff;
     height: 64px;
     line-height: 64px;

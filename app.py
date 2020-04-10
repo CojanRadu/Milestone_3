@@ -10,14 +10,19 @@ from urllib.parse import urlparse
 
 
 app = Flask(__name__)
+
+
 app.config["MONGO_DBNAME"] = 'milestone3'
 app.config["MONGO_URI"] = os.environ.get('MONGO_URI')
-
 app.secret_key = "randstring12345"
-
 mongo = PyMongo(app)
 
-# HELPERS ----------------------------------------------------------------------------------------------------
+@app.context_processor
+def all_user_names():
+    #  for post in posts.find({"date": {"$lt": d}}).sort("author")
+    user_names = mongo.db.users.find({"name":{ "$ne": "admin" }})
+    return dict(user_names=user_names)
+# MATH HELPERS ------------------------------------------------------------------------------------------
 
 
 def make_exercise(action, user):
@@ -32,6 +37,8 @@ def make_exercise(action, user):
     a = use_nr[a_temp]
     b = random.randint(1, 12)
 
+    hint = a
+
     if user['mult_opt_can_be_inverted']:
         x = random.randint(0, 1)
         if x:
@@ -40,7 +47,7 @@ def make_exercise(action, user):
             a = c
 
     c = int(a)*int(b)
-    mult_tuple = [int(a), int(b), c] if action == 'multiply' else [4, 5, 6]
+    mult_tuple = [int(a), int(b), c, int(hint)] if action == 'multiply' else [4, 5, 6]
     return mult_tuple
 
 
@@ -55,14 +62,14 @@ def get_exercise():
 def submit_answer():
     my_dict = urllib.parse.parse_qs(request.form['str'])
     print(str(my_dict))
-    exercise_doc = {'user_name': session["u_name"], 'date': datetime.now(
+    exercise_doc = {'user_name': session["u_name"], 'user_id': session['u_id'] ,'date': datetime.now(
     ), 'type': 'multiply', 'nr_1': 1, 'nr_2': 2, 'nr_3': 3, 'answer': 4, 'is_correct': True, 'nr_of_tries': 1, 'session': "aaa"}
     mongo.db.exercise.insert_one(exercise_doc)
     return 'Answer was submitted'
 
 # END HElpers -------------------------------------------------------------------------------------------------
 
-
+# HOME ROUTE -------------------------------------------------------------------------------------------------
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -71,10 +78,6 @@ def login():
 # ADMIN SECTION -----------------------------------------------------------------------------------------------
 admin_user = mongo.db.users.find_one({"name": "admin"})
 
-
-@app.route('/admin')
-def admin():
-    return render_template("admin/admin_base.html", admin=admin_user)
 
 
 @app.route('/show_settings')
@@ -98,7 +101,9 @@ def show_users():
 def delete_user():
     # return '<h1>DELETED ' + request.form['user_id'] + ' !</h1>'
     mongo.db.users.remove({'_id': ObjectId(request.form['user_id'])})
-
+    mongo.db.exercise.remove({'user_id': request.form['user_id']})
+    print(str(ObjectId(request.form['user_id'])))
+    return 'Deleted'    
 
 @app.route('/update_settings', methods=['POST', 'GET'])
 def update_settings():
@@ -111,6 +116,7 @@ def update_settings():
     my_dict.setdefault('inverted', '[off]')
     my_dict.setdefault('show_hint', '[off]')
     my_dict.setdefault('auto_submit', '[off]')
+    my_dict.setdefault('show_answer', '[off]')
     my_dict.setdefault('mult_retry_opt', "['1']")
 
     user = admin_user if str(my_dict['user_name']) == "['admin']" else mongo.db.users.find_one(
@@ -124,6 +130,7 @@ def update_settings():
     user['mult_opt_can_be_inverted'] = True if str(my_dict['inverted']) == "['on']" else False
     user['mult_opt_show_hint'] = True if str(my_dict['show_hint']) == "['on']" else False
     user['mult_opt_auto_submit'] = True if str(my_dict['auto_submit']) == "['on']" else False
+    user['mult_opt_show_answer'] = True if str(my_dict['show_answer']) == "['on']" else False
 
     """" Have to update rest or wont refresh TODO  find a solution """
     """ Maybe fetch user again """
@@ -144,6 +151,7 @@ def update_settings():
                           'mult_opt_retry_nr': user['mult_opt_retry_nr'],
                           'mult_opt_show_hint': user['mult_opt_show_hint'],
                           'mult_opt_auto_submit': user['mult_opt_auto_submit'],
+                          'mult_opt_show_answer': user['mult_opt_show_answer'],
                           "mult_opt_nr.0": user['mult_opt_nr']['0'],
                           "mult_opt_nr.1": user['mult_opt_nr']['1'],
                           "mult_opt_nr.2": user['mult_opt_nr']['2'],
@@ -174,9 +182,25 @@ def exercise(username):
     return render_template('exercise.html', user=user, make_exercise=make_exercise)
 
 
-@app.route('/login_', methods=['POST'])
+# TODO - FIX this
+@app.route('/dologin')
+def login_as_get():
+    # return render_template('index.html', name="")
+    return redirect(url_for('exercise', username=""))
+
+@app.route('/dologin', methods=["POST"])
+def login_as_post():
+    name = request.form.get('user_name').lower()
+    # return render_template('index.html', name=name)
+    return redirect(url_for('exercise', username=name))
+
+@app.route('/login_', methods=['POST', 'GET'])
 def login_():
+
+    # if request.method == 'POST':
     username = request.form.get('user_name').lower()
+    # else: username = name
+
     session["u_name"] = username
 
     if (username == 'admin'):
@@ -214,3 +238,4 @@ if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
             debug=True)
+

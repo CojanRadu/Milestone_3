@@ -24,17 +24,21 @@
 
                     <form action="#" name="ex_form" id="ex_form" method="POST">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <!-- ANSWER FIELD -->
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
-                                id="answer" name="answer" autofocus placeholder="{{ curr_exercise[2] }}" readonly>
+                                id="answer" name="answer" autofocus {% if user.mult_opt_show_answer %}
+                                placeholder="{{ curr_exercise[2] }}" {% endif %} readonly>
+                            <!-- END ASNSWER FIELD  -->
                             <label class="mdl-textfield__label" for="answer"><span
                                     class="ex_0">{{ curr_exercise[0] }}</span><i
                                     class="material-icons operation-icon-small">clear</i><span
-                                    class="ex_1">{{ curr_exercise[1] }}</span> =
+                                    class="ex_1">{{ curr_exercise[1] }}</span> = {% if user.mult_opt_show_answer %} {{ curr_exercise[2] }} {% endif %} 
                             </label>
                             <span class="mdl-textfield__error">Input is not a number!</span>
                         </div>
                         <input type="hidden" name="correct_answer" id="correct_answer" value="{{ curr_exercise[2] }}"
                             class="ex_2">
+                        <input type="hidden" name="hint_used" id="hint_used" value="0">
                     </form>
 
 
@@ -46,9 +50,27 @@
                     </a>
                 </div>
 
+                {% if user.mult_opt_show_hint %}
                 <div class="mdl-card__menu">
-                    add badge here
+
+                    <div style=" margin-left: -300px; " id="show_hint">
+                        <a style="cursor: pointer; left: 250px; position: relative; " id="hint_link">
+                            <span class="mdl-badge" data-badge="1">Hint &nbsp;</span>
+                    </div>
+                    </a>
+
+                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
+                        for="show_hint" style="transform-origin: -100% 0">
+                        <li class="ml15"><strong>Multiply by 9</strong></li>
+                        {% for n in range(1,13) %}
+                        <li class="mdl-list__item  hint">
+                            {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} = {{ curr_exercise[3] * n }}
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
+
+                {% endif %}
             </div>
         </div>
         <div class="mdl-cell mdl-cell--2-col-phone">
@@ -87,6 +109,13 @@
                     </div>
 
                 </div>
+                <div class="mdl-card__menu">
+                    <span class="mdl-chip mdl-chip--contact">
+                        <span class="mdl-chip__contact color--orange" id="unicorn_points">0</span>
+                        <span class="mdl-chip__text">Unicorn Points</span>
+                        <input type="hidden" name="unicorn_field" value="0">
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -101,12 +130,15 @@
                     let new_val = $('#answer').val() + val;
                     {% if user.mult_opt_auto_submit %}
                     if ($('#correct_answer').val() == new_val) {
-                            console.log('correct');
-                            submit_form();
-                        }
+                        console.log('correct');
+                        let unicorn = parseInt($('#unicorn_points').html()) + 1;
+                        $('#unicorn_points').html(unicorn);
+                        $("#unicorn_field").val = unicorn;
+                        submit_form();
+                    }
                     {% endif %}
                     $('#answer').val(new_val);
-                    
+
 
                 }
                 else if (val == 'ok') {
@@ -119,6 +151,11 @@
                 }
                 $("#answer").focus();
             })
+
+            $('#hint_link').click(function() {
+                console.log('hint');
+                $("#hint_used").val(1);
+            })
         });
 
         function get_new_exercise() {
@@ -128,8 +165,12 @@
                 $('.ex_0').html(response[0]);
                 $('.ex_1').html(response[1]);
                 $('#answer').val('');
+                $('#correct_answer').val(response[2]);
+
                 // $('.ex_2').val(response[2]);
+                {% if user.mult_opt_show_answer %}
                 $('.ex_2').attr("placeholder", response[2]);
+                {% endif %}
             });
         }
 
@@ -164,7 +205,7 @@
             }
         }
 
-        
+
 
 
         $('#submit_form').click(function () {

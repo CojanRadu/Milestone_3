@@ -39,3 +39,8 @@
     float: left; margin: -4px 0px 4px 141px;
     z-index: 10;
 }
+
+.hint {
+    min-height: 10px;
+    padding: 4px 16px;
+}
