@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 
 {% block content %}
+{% set cnt = namespace(value=0) %}
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
 
     <h4>Is new user: {{ session['u_new'] }} </h4>
@@ -20,7 +21,7 @@
                     <h2 style="text-align: center;">
                         <span class="ex_0">{{ curr_exercise[0] }}</span>
                         <i class="material-icons operation-icon">clear</i>
-                        <span class="ex_1">{{ curr_exercise[1] }}</span></h2>
+                        <span class="ex_1">{{ curr_exercise[1] }} = </span></h2>
 
                     <form action="#" name="ex_form" id="ex_form" method="POST">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -32,7 +33,8 @@
                             <label class="mdl-textfield__label" for="answer"><span
                                     class="ex_0">{{ curr_exercise[0] }}</span><i
                                     class="material-icons operation-icon-small">clear</i><span
-                                    class="ex_1">{{ curr_exercise[1] }}</span> = {% if user.mult_opt_show_answer %} {{ curr_exercise[2] }} {% endif %} 
+                                    class="ex_1">{{ curr_exercise[1] }}</span> = {% if user.mult_opt_show_answer %}
+                                {{ curr_exercise[2] }} {% endif %}
                             </label>
                             <span class="mdl-textfield__error">Input is not a number!</span>
                         </div>
@@ -49,7 +51,7 @@
                         Get a Unicorn Coin
                     </a>
                 </div>
-
+                <!-- Start hint -->
                 {% if user.mult_opt_show_hint %}
                 <div class="mdl-card__menu">
 
@@ -61,16 +63,17 @@
 
                     <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
                         for="show_hint" style="transform-origin: -100% 0">
-                        <li class="ml15"><strong>Multiply by 9</strong></li>
+                        <li class="ml15"><strong>Multiply by {{ curr_exercise[3] }}</strong></li>
                         {% for n in range(1,13) %}
                         <li class="mdl-list__item  hint">
-                            {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} = {{ curr_exercise[3] * n }}
+                            {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
+                            {{ curr_exercise[3] * n }}
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
-
                 {% endif %}
+                <!-- end hint  -->
             </div>
         </div>
         <div class="mdl-cell mdl-cell--2-col-phone">
@@ -79,6 +82,9 @@
                     <h2 class="mdl-card__title-text">TITLE</h2>
                 </div>
                 <div class="mdl-card__supporting-text mdl-card--expand">
+
+                    <!-- start keypad -->
+                    {% if user.mult_opt_answer_type == 1 %}
                     <div class="grid">
                         {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
                         {% for b_nr in all_buttons %}
@@ -107,7 +113,26 @@
 
                         {% endfor %}
                     </div>
+                    {% else %}
 
+                    {% for x in curr_exercise[4] %}
+                    <label
+                        class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
+                        for="switchX{{ loop.index }}">
+                        <input type="checkbox" id="switchX{{ loop.index }}" class="mdl-switch__input"
+                            name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
+                            value="{{ x }}">
+                        <span class="mdl-switch__label">
+                            <span
+                                class="big-label" id="checkbox_answer{{ loop.index }}">&nbsp;{{ x }}</span>
+                        </span>
+
+                    </label>
+
+                    {% set cnt.value = cnt.value + 1  %}
+                    {% endfor %}
+                    {% endif %}
+                    <!-- end keypad -->
                 </div>
                 <div class="mdl-card__menu">
                     <span class="mdl-chip mdl-chip--contact">
@@ -152,11 +177,40 @@
                 $("#answer").focus();
             })
 
-            $('#hint_link').click(function() {
+            $('#hint_link').click(function () {
                 console.log('hint');
                 $("#hint_used").val(1);
             })
+
+            
         });
+        //END document ready
+
+        $('.mdl-switch__input').click(function () {
+                // .each()
+                let el1 = $(this);
+                if (el1.prop('checked')) {
+                    console.log((el1).val());
+                    $('#answer').val((el1).val());
+                    // for checkboxes auto-submit enabled - will submit correct AND wrong answer
+                    {% if user.mult_opt_auto_submit %}
+                    setTimeout(submit_form, 500);
+                    return;
+                    {% endif %}
+                    
+                }   
+                else {
+                    console.log('clear field');
+                    $('#answer').val('');
+                }
+                $.each($('.mdl-switch__input'), function (index, el) {
+                    
+                    var btn = $(this);
+                    if ((el1.prop('id') !== $(el).prop('id')) && ($(this).prop('checked'))) {
+                    btn.trigger("click");
+                    }
+                })
+            });
 
         function get_new_exercise() {
             $.get("{{ url_for('get_exercise') }}", function (data) {
@@ -171,13 +225,27 @@
                 {% if user.mult_opt_show_answer %}
                 $('.ex_2').attr("placeholder", response[2]);
                 {% endif %}
+
+                {% if user.mult_opt_answer_type > 1 %}
+                let options = response[4] ;
+                console.log((options.length));
+                for (let i = 1; i <= (options.length) ; i++) {
+                    $('#checkbox_answer'+i).html('&nbsp;'+options[(i-1)]);
+                    the_switch = $('#switchX'+i);
+                    the_switch.val(options[(i-1)])  ;
+                    if (the_switch.prop('checked')) {
+                         the_switch.trigger('click');
+                    }
+                }
+                {% endif %}
+                
             });
         }
 
         function submit_answer() {
 
             var str = $("#ex_form").serialize();
-            event.preventDefault();
+            // event.preventDefault();
             console.log(str);
             $.post("{{ url_for('submit_answer') }}", { str })
                 .done(function (data) {
@@ -210,7 +278,16 @@
 
         $('#submit_form').click(function () {
 
-            submit_form();
+            // console.log($('#switch2').prop('checked'));
+            // console.log('{{ cnt.value }}');
+
+            // for (let i = 1; i <= {{ cnt.value }}; i++) {
+                // if (i != 1) {
+                // $('#switchX' + i).trigger('click');
+                // }
+            // }
+        // $('#switch2').trigger('click');
+        submit_form();
         });
     </script>
     {% endblock %}

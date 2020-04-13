@@ -17,30 +17,46 @@
     height: auto !important;
 }
 
-.mdl-cell
-{
+.mdl-cell {
     min-width: 400px;
 }
+
 .grid {
     display: grid;
     grid-gap: 30px;
     grid-template-columns: repeat(3, 1fr);
 }
 
-.keypad{
+.keypad {
     font-size: 50px;
     padding: 20px;
 }
 
 .undo {
-    top:-4px;
+    top: -4px;
 }
+
 .badge-slider {
-    float: left; margin: -4px 0px 4px 141px;
+    float: left;
+    margin: -4px 0px 4px 141px;
     z-index: 10;
 }
 
 .hint {
     min-height: 10px;
     padding: 4px 16px;
+}
+
+.big-label {
+    font-size: 50px;
+}
+.small-label {
+    position: relative;
+    top: -11px;
+}
+.mdl-switch.big-label {
+    height: 75px;
+    margin-left: auto;
+    margin-right: auto;
+
 }
