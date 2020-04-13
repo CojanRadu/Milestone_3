@@ -2,28 +2,51 @@
 
 {% block content %}
 {% set cnt = namespace(value=0) %}
+{% set curr_exercise = make_exercise('multiply', user) %}
+
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
+    <form action="#" name="ex_form" id="ex_form" method="POST">
+        <h4>Is new user: {{ session['u_new'] }} </h4>
+        <input type="hidden" name="type" value="multiply">
+        <input type="hidden" name="nr_1" value="{{ curr_exercise[0] }}">
+        <input type="hidden" name="nr_2" value="{{ curr_exercise[1] }}">
 
-    <h4>Is new user: {{ session['u_new'] }} </h4>
+        <div class="mdl-grid ui-cards">
+            <div class="mdl-cell mdl-cell--2-col-phone">
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <span class="title_span">Exercise</span>
+                        <div class="mdl-card__menu" style="left: 16px; right:unset;">
+                            <span class="mdl-chip mdl-chip--contact">
+                                <span class="mdl-chip__contact color--orange" id="unicorn_points">0</span>
+                                <span class="mdl-chip__text">Unicorn Points</span>
+                                <input type="hidden" name="unicorn_points" value="0">
+                            </span>
+                        </div>
+                        {% if user.mult_opt_exercise_nr > 0 %}
+                        <div class="mdl-card__menu">
+                            <span class="mdl-chip mdl-chip--contact">
+                                <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
+                                <span class="mdl-chip__text"> of &nbsp;</span>
+                                <span class="mdl-chip__contact right color--orange"
+                                    id="ex_total_nr">{{user.mult_opt_exercise_nr}}</span>
+                                <input type="hidden" name="ex_curr_nr" value="0">
+                                <input type="hidden" name="total_exercise" value="{{user.mult_opt_exercise_nr}}">
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--expand">
+                        <small>small text</small>
+                        regular text
+                        <br><br>
+                        <b>etc</b>
+                        <h2 style="text-align: center;">
+                            <span class="ex_0">{{ curr_exercise[0] }}</span>
+                            <i class="material-icons operation-icon">clear</i>
+                            <span class="ex_1">{{ curr_exercise[1] }} = </span></h2>
 
-    <div class="mdl-grid ui-cards">
-        <div class="mdl-cell mdl-cell--2-col-phone">
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">TITLE</h2>
-                </div>
-                <div class="mdl-card__supporting-text mdl-card--expand">
-                    <small>small text</small>
-                    regular text
-                    <br><br>
-                    <b>etc</b>
-                    {% set curr_exercise = make_exercise('multiply', user) %}
-                    <h2 style="text-align: center;">
-                        <span class="ex_0">{{ curr_exercise[0] }}</span>
-                        <i class="material-icons operation-icon">clear</i>
-                        <span class="ex_1">{{ curr_exercise[1] }} = </span></h2>
 
-                    <form action="#" name="ex_form" id="ex_form" method="POST">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <!-- ANSWER FIELD -->
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
@@ -33,64 +56,82 @@
                             <label class="mdl-textfield__label" for="answer"><span
                                     class="ex_0">{{ curr_exercise[0] }}</span><i
                                     class="material-icons operation-icon-small">clear</i><span
-                                    class="ex_1">{{ curr_exercise[1] }}</span> = {% if user.mult_opt_show_answer %}
+                                    class="ex_1">{{ curr_exercise[1] }} =</span>{% if user.mult_opt_show_answer %}
                                 {{ curr_exercise[2] }} {% endif %}
                             </label>
                             <span class="mdl-textfield__error">Input is not a number!</span>
                         </div>
                         <input type="hidden" name="correct_answer" id="correct_answer" value="{{ curr_exercise[2] }}"
                             class="ex_2">
-                        <input type="hidden" name="hint_used" id="hint_used" value="0">
-                    </form>
 
 
-                </div>
-                <div class="mdl-card__actions">
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green "
-                        id="submit_form">
-                        Get a Unicorn Coin
-                    </a>
-                </div>
-                <!-- Start hint -->
-                {% if user.mult_opt_show_hint %}
-                <div class="mdl-card__menu">
 
-                    <div style=" margin-left: -300px; " id="show_hint">
-                        <a style="cursor: pointer; left: 250px; position: relative; " id="hint_link">
-                            <span class="mdl-badge" data-badge="1">Hint &nbsp;</span>
+
                     </div>
-                    </a>
+                    {% if (user.mult_opt_auto_submit == False and user.mult_opt_answer_type > 1) %}
+                    <div class="mdl-card__actions">
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green "
+                            id="submit_form">
+                            Get a Unicorn Coin
+                        </a>
+                    </div>
+                    {% endif %}
 
-                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
-                        for="show_hint" style="transform-origin: -100% 0">
-                        <li class="ml15"><strong>Multiply by {{ curr_exercise[3] }}</strong></li>
-                        {% for n in range(1,13) %}
-                        <li class="mdl-list__item  hint">
-                            {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
-                            {{ curr_exercise[3] * n }}
-                        </li>
-                        {% endfor %}
-                    </ul>
                 </div>
-                {% endif %}
-                <!-- end hint  -->
             </div>
-        </div>
-        <div class="mdl-cell mdl-cell--2-col-phone">
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">TITLE</h2>
-                </div>
-                <div class="mdl-card__supporting-text mdl-card--expand">
+            <div class="mdl-cell mdl-cell--2-col-phone">
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title"> <span class="title_span">Retry</span>
+                        {% if user.mult_opt_show_hint %}
+                        <div id="show_hint">
 
-                    <!-- start keypad -->
-                    {% if user.mult_opt_answer_type == 1 %}
-                    <div class="grid">
-                        {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
-                        {% for b_nr in all_buttons %}
-                        <div class="cell">
+                            <a style="cursor: pointer; font-weight: 400;" id="hint_link">
+                                <div class="mdl-card__menu" style="left: 16px; right:unset;">
+                                    <span class="mdl-chip mdl-chip--contact">
+                                        <span class="mdl-chip__contact color--orange" id="hint_nr">0</span>
+                                        <span class="mdl-chip__text">Hint</span>
+                                        <input type="hidden" name="hint_nr" value="0">
+                                    </span>
+                                </div>
 
-                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect 
+                            </a>
+
+                            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
+                                for="show_hint" style="transform-origin: -100% 0">
+                                <li class="ml15"><strong>Multiply by {{ curr_exercise[3] }}</strong></li>
+                                {% for n in range(1,13) %}
+                                <li class="mdl-list__item  hint">
+                                    {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
+                                    {{ curr_exercise[3] * n }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                        {% endif %}
+                        {% if user.mult_opt_retry_nr > 1 %}
+
+                        <div class="mdl-card__menu">
+                            <span class="mdl-chip mdl-chip--contact">
+                                <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
+                                <span class="mdl-chip__text"> of &nbsp;</span>
+                                <span class="mdl-chip__contact right color--orange"
+                                    id="ex_total_retry">{{user.mult_opt_retry_nr}}</span>
+                                <input type="hidden" name="ex_retry" value="0">
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-card--expand">
+
+                        <!-- start keypad -->
+                        {% if user.mult_opt_answer_type == 1 %}
+                        <div class="grid">
+                            {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
+                            {% for b_nr in all_buttons %}
+                            <div class="cell">
+
+                                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect 
                             {% if (b_nr == 'ok') %} 
                                 button--colored-green
                                 {% else %}
@@ -104,190 +145,226 @@
 
                             
                             keypad" data-nr="{{ b_nr }}">
-                                {% if b_nr != 'undo' %} {{ b_nr }}
-                                {% else  %} <i class="material-icons operation-icon undo">undo</i>
-                                {% endif %}
-                            </a>
+                                    {% if b_nr != 'undo' %} {{ b_nr }}
+                                    {% else  %} <i class="material-icons operation-icon undo">undo</i>
+                                    {% endif %}
+                                </a>
 
+                            </div>
+
+                            {% endfor %}
                         </div>
+                        {% else %}
 
+                        {% for x in curr_exercise[4] %}
+                        <label
+                            class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
+                            for="switchX{{ loop.index }}">
+                            <input type="checkbox" id="switchX{{ loop.index }}" class="mdl-switch__input"
+                                name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
+                                value="{{ x }}">
+                            <span class="mdl-switch__label">
+                                <span class="big-label" id="checkbox_answer{{ loop.index }}">&nbsp;{{ x }}</span>
+                            </span>
+
+                        </label>
+
+                        {% set cnt.value = cnt.value + 1  %}
                         {% endfor %}
+                        {% endif %}
+                        <!-- end keypad -->
                     </div>
-                    {% else %}
 
-                    {% for x in curr_exercise[4] %}
-                    <label
-                        class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
-                        for="switchX{{ loop.index }}">
-                        <input type="checkbox" id="switchX{{ loop.index }}" class="mdl-switch__input"
-                            name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
-                            value="{{ x }}">
-                        <span class="mdl-switch__label">
-                            <span
-                                class="big-label" id="checkbox_answer{{ loop.index }}">&nbsp;{{ x }}</span>
-                        </span>
-
-                    </label>
-
-                    {% set cnt.value = cnt.value + 1  %}
-                    {% endfor %}
-                    {% endif %}
-                    <!-- end keypad -->
-                </div>
-                <div class="mdl-card__menu">
-                    <span class="mdl-chip mdl-chip--contact">
-                        <span class="mdl-chip__contact color--orange" id="unicorn_points">0</span>
-                        <span class="mdl-chip__text">Unicorn Points</span>
-                        <input type="hidden" name="unicorn_field" value="0">
-                    </span>
                 </div>
             </div>
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $(".keypad").click(function () {
-                let val = $(this).attr('data-nr');
-                if ($.isNumeric(val)) {
-                    let new_val = $('#answer').val() + val;
-                    {% if user.mult_opt_auto_submit %}
-                    if ($('#correct_answer').val() == new_val) {
-                        console.log('correct');
-                        let unicorn = parseInt($('#unicorn_points').html()) + 1;
-                        $('#unicorn_points').html(unicorn);
-                        $("#unicorn_field").val = unicorn;
-                        submit_form();
-                    }
-                    {% endif %}
-                    $('#answer').val(new_val);
-
-
-                }
-                else if (val == 'ok') {
+<script>
+    $(document).ready(function () {
+        $(".keypad").click(function () {
+            let val = $(this).attr('data-nr');
+            if ($.isNumeric(val)) {
+                let new_val = $('#answer').val() + val;
+                {% if user.mult_opt_auto_submit %}
+                if ($('#correct_answer').val() == new_val) {
+                    console.log('correct');
+                    // set_unicorn_points();
                     submit_form();
                 }
-                else {
-                    var str = $('#answer').val();
-                    var res = str.substring(0, str.length - 1);
-                    $('#answer').val(res);
+                {% endif %}
+                $('#answer').val(new_val);
+
+
+            }
+            else if (val == 'ok') {
+                submit_form();
+            }
+            else {
+                var str = $('#answer').val();
+                var res = str.substring(0, str.length - 1);
+                $('#answer').val(res);
+            }
+            $("#answer").focus();
+        })
+
+        $('#hint_link').click(function () {
+            console.log('hint');
+            set_chip('hint_nr')
+            // $("#hint_used").val(1);
+        })
+
+
+    });
+    //END document ready
+
+    function set_chip(chip_name) {
+        let chip_val = parseInt($('#' + chip_name).html()) + 1;
+        console.log('chip val ' + chip_name + chip_val)
+        $('#' + chip_name).html(chip_val);
+        $('input[name="' + chip_name + '"]').val(chip_val);
+    }
+
+    $('.mdl-switch__input').click(function () {
+        // .each()
+        let el1 = $(this);
+        if (el1.prop('checked')) {
+            console.log((el1).val());
+            $('#answer').val((el1).val());
+            // for checkboxes auto-submit enabled - will submit correct AND wrong answer
+            {% if user.mult_opt_auto_submit %}
+            setTimeout(submit_form, 500);
+            return;
+            {% endif %}
+
+        }
+        else {
+            console.log('clear field');
+            $('#answer').val('');
+        }
+        $.each($('.mdl-switch__input'), function (index, el) {
+
+            var btn = $(this);
+            if ((el1.prop('id') !== $(el).prop('id')) && ($(this).prop('checked'))) {
+                btn.trigger("click");
+            }
+        })
+    });
+
+    function get_new_exercise() {
+        $.get("{{ url_for('get_exercise') }}", function (data) {
+            let response = jQuery.parseJSON(data)
+            // $('#answer').val(response[0]);
+            $('.ex_0').html(response[0]);
+            $('.ex_1').html(response[1] + ' = ');
+            $('#answer').val('');
+            $('#hint_nr').html('0');
+            $('#ex_retry').html('1');
+            $('#correct_answer').val(response[2]);
+
+            // $('.ex_2').val(response[2]);
+            {% if user.mult_opt_show_answer %}
+            $('.ex_2').attr("placeholder", response[2]);
+            {% endif %}
+
+            {% if user.mult_opt_answer_type > 1 %}
+            let options = response[4];
+            console.log((options.length));
+            for (let i = 1; i <= (options.length); i++) {
+                $('#checkbox_answer' + i).html('&nbsp;' + options[(i - 1)]);
+                the_switch = $('#switchX' + i);
+                the_switch.val(options[(i - 1)]);
+                if (the_switch.prop('checked')) {
+                    the_switch.trigger('click');
                 }
-                $("#answer").focus();
-            })
+            }
+            {% endif %}
 
-            $('#hint_link').click(function () {
-                console.log('hint');
-                $("#hint_used").val(1);
-            })
-
-            
         });
-        //END document ready
+    }
 
-        $('.mdl-switch__input').click(function () {
-                // .each()
-                let el1 = $(this);
-                if (el1.prop('checked')) {
-                    console.log((el1).val());
-                    $('#answer').val((el1).val());
-                    // for checkboxes auto-submit enabled - will submit correct AND wrong answer
-                    {% if user.mult_opt_auto_submit %}
-                    setTimeout(submit_form, 500);
-                    return;
-                    {% endif %}
-                    
-                }   
-                else {
-                    console.log('clear field');
-                    $('#answer').val('');
+    // https://css-tricks.com/snippets/jquery/serialize-form-to-json/
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
                 }
-                $.each($('.mdl-switch__input'), function (index, el) {
-                    
-                    var btn = $(this);
-                    if ((el1.prop('id') !== $(el).prop('id')) && ($(this).prop('checked'))) {
-                    btn.trigger("click");
-                    }
-                })
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    function submit_answer() {
+
+        var str = $("#ex_form").serializeArray();
+        // let data_object = $('#ex_form').serializeObject();
+        let data_object  = $("#ex_form").serialize();
+        // event.preventDefault();
+        console.log(data_object);
+        $.post("{{ url_for('submit_answer') }}", { data_object })
+            .done(function (data) {
+                console.log("Response Was: " + data);
             });
+    }
 
-        function get_new_exercise() {
-            $.get("{{ url_for('get_exercise') }}", function (data) {
-                let response = jQuery.parseJSON(data)
-                // $('#answer').val(response[0]);
-                $('.ex_0').html(response[0]);
-                $('.ex_1').html(response[1]);
-                $('#answer').val('');
-                $('#correct_answer').val(response[2]);
-
-                // $('.ex_2').val(response[2]);
-                {% if user.mult_opt_show_answer %}
-                $('.ex_2').attr("placeholder", response[2]);
-                {% endif %}
-
-                {% if user.mult_opt_answer_type > 1 %}
-                let options = response[4] ;
-                console.log((options.length));
-                for (let i = 1; i <= (options.length) ; i++) {
-                    $('#checkbox_answer'+i).html('&nbsp;'+options[(i-1)]);
-                    the_switch = $('#switchX'+i);
-                    the_switch.val(options[(i-1)])  ;
-                    if (the_switch.prop('checked')) {
-                         the_switch.trigger('click');
-                    }
-                }
-                {% endif %}
-                
-            });
-        }
-
-        function submit_answer() {
-
-            var str = $("#ex_form").serialize();
-            // event.preventDefault();
-            console.log(str);
-            $.post("{{ url_for('submit_answer') }}", { str })
-                .done(function (data) {
-                    console.log("Response Was: " + data);
-                });
-        }
-
-        function submit_form() {
-            if ($.isNumeric($("#answer").val())) {
+    function submit_form() {
+        if ($.isNumeric($("#answer").val())) {
+            if (($("#answer").val() == $("#correct_answer").val()) || (parseInt($('#ex_retry').html()) >= parseInt($('#ex_total_retry').html()))) {
+                set_chip('unicorn_points');
+                set_chip('ex_curr_nr');
                 submit_answer();
                 get_new_exercise();
                 $("#answer").focus();
+                console.log('PARSE INT ' + parseInt($('#ex_retry').html()) + ' >= ' + parseInt($('#ex_total_retry').html()));
             } else {
 
-                //HACK for not triggering keyboard on tablet
-                //and to show built-in HTML validator mressage
-                //will not work on older browsers    
+                console.log('PARSE INT ' + parseInt($('#ex_retry').html()));
+                set_chip('ex_retry');
 
-                $("#answer").prop('required', true);
-                $("#answer").prop('readonly', false);
-                let form = document.querySelector('form');
-                form.reportValidity();
-
-                setTimeout(function () { $("input").prop('readonly', true); }, 1000);
             }
+
+        } else {
+
+            //HACK for not triggering keyboard on tablet
+            //and to show built-in HTML validator mressage
+            //will not work on older browsers    
+
+            $("#answer").prop('required', true);
+            $("#answer").prop('readonly', false);
+            let form = document.querySelector('form');
+            form.reportValidity();
+
+            setTimeout(function () { $("input").prop('readonly', true); }, 1000);
         }
+    }
 
 
 
+    $('#submit_form').click(function () {
 
-        $('#submit_form').click(function () {
+        // console.log($('#switch2').prop('checked'));
+        // console.log('{{ cnt.value }}');
 
-            // console.log($('#switch2').prop('checked'));
-            // console.log('{{ cnt.value }}');
-
-            // for (let i = 1; i <= {{ cnt.value }}; i++) {
-                // if (i != 1) {
-                // $('#switchX' + i).trigger('click');
-                // }
-            // }
+        // for (let i = 1; i <= {{ cnt.value }}; i++) {
+        // if (i != 1) {
+        // $('#switchX' + i).trigger('click');
+        // }
+        // }
         // $('#switch2').trigger('click');
         submit_form();
-        });
-    </script>
-    {% endblock %}
+    });
+
+    //message when refreshing ??
+    window.onbeforeunload = function () {
+        // return "you can not refresh the page";
+    }
+</script>
+{% endblock %}

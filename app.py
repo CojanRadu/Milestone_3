@@ -72,11 +72,21 @@ def get_exercise():
 
 @app.route('/submit_answer', methods=['POST', 'GET'])
 def submit_answer():
-    my_dict = urllib.parse.parse_qs(request.form['str'])
-    print(str(my_dict))
-    exercise_doc = {'user_name': session["u_name"], 'user_id': session['u_id'] ,'date': datetime.now(
-    ), 'type': 'multiply', 'nr_1': 1, 'nr_2': 2, 'nr_3': 3, 'answer': 4, 'is_correct': True, 'nr_of_tries': 1, 'session': "aaa"}
+    parsed = str(urllib.parse.parse_qs(request.form['data_object'])).replace("'", '"').replace("[", "").replace("]", "")
+    json_form = (json.loads(parsed))
+    print(json_form)
+    is_correct = True if json_form['correct_answer'] == json_form['answer'] else False
+    is_hint = True if int(json_form['hint_nr']) != 0 else False
+
+    exercise_doc = {'user_name': session["u_name"], 'user_id': session['u_id'] , 'type': json_form['type'], 
+    'date': datetime.now(), 'nr_1': int(json_form['nr_1']), 'nr_2': int(json_form['nr_2']), 'correct': int(json_form['correct_answer']), 
+    'answer': int(json_form['answer']), 'is_correct': is_correct, 'nr_of_tries': int(json_form['ex_retry']), 'used_hint': is_hint,
+    'exercise_nr':int(json_form['ex_curr_nr']) , 'total_exercise':int(json_form['total_exercise'])
+    }
+
+    print(str(exercise_doc))
     mongo.db.exercise.insert_one(exercise_doc)
+
     return 'Answer was submitted'
 
 # END HElpers -------------------------------------------------------------------------------------------------

@@ -60,3 +60,22 @@
     margin-right: auto;
 
 }
+.mdl-card__title {
+    min-height: 80px;
+}
+
+.mdl-chip__text {
+    min-width: 30px;
+    text-align: center;
+}
+.mdl-chip__contact.right {
+    margin-right: -12px;
+}
+.title_span {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 28px;
+    padding-left: 50px;
+    margin-bottom: 6px;
+    margin-top: -6px;
+}
