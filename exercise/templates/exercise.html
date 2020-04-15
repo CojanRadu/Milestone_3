@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'exercise_base.html'%}
 
 {% block content %}
 {% set cnt = namespace(value=0) %}
@@ -82,6 +82,7 @@
             <div class="mdl-cell mdl-cell--2-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title"> <span class="title_span">Retry</span>
+                        <!-- show hint -->
                         {% if user.mult_opt_show_hint %}
                         <div id="show_hint">
 
@@ -110,7 +111,7 @@
                         </div>
                         {% endif %}
                         {% if user.mult_opt_retry_nr > 1 %}
-
+                        <!-- retry  -->
                         <div class="mdl-card__menu">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
@@ -164,10 +165,23 @@
                                 name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
                                 value="{{ x }}">
                             <span class="mdl-switch__label">
-                                <span class="big-label" id="checkbox_answer{{ loop.index }}">&nbsp;{{ x }}</span>
+                                <span class="big-label" id="checkbox_answer{{ loop.index }}"> 
+                                    {% set len2 = x|string|length %}
+                                    {% set len = len2|int %}
+                                    {%if len == 3 %}
+                                        {{ "{:>2}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {% endif %} 
+                                    {% if len == 2%}
+                                        {{ "{:>4}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {% endif %}
+                                    {% if len == 1%}
+                                        {{ "{:>5}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {% endif %} 
+                                </span>
                             </span>
 
                         </label>
+                        
 
                         {% set cnt.value = cnt.value + 1  %}
                         {% endfor %}
@@ -177,6 +191,7 @@
 
                 </div>
             </div>
+        </div>
     </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -196,8 +211,6 @@
                 }
                 {% endif %}
                 $('#answer').val(new_val);
-
-
             }
             else if (val == 'ok') {
                 submit_form();
@@ -215,8 +228,6 @@
             set_chip('hint_nr')
             // $("#hint_used").val(1);
         })
-
-
     });
     //END document ready
 
@@ -238,7 +249,6 @@
             setTimeout(submit_form, 500);
             return;
             {% endif %}
-
         }
         else {
             console.log('clear field');
@@ -254,7 +264,7 @@
     });
 
     function get_new_exercise() {
-        $.get("{{ url_for('get_exercise') }}", function (data) {
+        $.get("{{ url_for('exercise_bp.get_exercise') }}", function (data) {
             let response = jQuery.parseJSON(data)
             // $('#answer').val(response[0]);
             $('.ex_0').html(response[0]);
@@ -281,7 +291,6 @@
                 }
             }
             {% endif %}
-
         });
     }
 
@@ -306,10 +315,10 @@
 
         var str = $("#ex_form").serializeArray();
         // let data_object = $('#ex_form').serializeObject();
-        let data_object  = $("#ex_form").serialize();
+        let data_object = $("#ex_form").serialize();
         // event.preventDefault();
         console.log(data_object);
-        $.post("{{ url_for('submit_answer') }}", { data_object })
+        $.post("{{ url_for('exercise_bp.submit_answer') }}", { data_object })
             .done(function (data) {
                 console.log("Response Was: " + data);
             });
@@ -323,14 +332,11 @@
                 submit_answer();
                 get_new_exercise();
                 $("#answer").focus();
-                console.log('PARSE INT ' + parseInt($('#ex_retry').html()) + ' >= ' + parseInt($('#ex_total_retry').html()));
+                // console.log('PARSE INT ' + parseInt($('#ex_retry').html()) + ' >= ' + parseInt($('#ex_total_retry').html()));
             } else {
-
-                console.log('PARSE INT ' + parseInt($('#ex_retry').html()));
+                // console.log('PARSE INT ' + parseInt($('#ex_retry').html()));
                 set_chip('ex_retry');
-
             }
-
         } else {
 
             //HACK for not triggering keyboard on tablet

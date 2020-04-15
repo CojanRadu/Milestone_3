@@ -5,11 +5,11 @@
             <div class="scroll__container" id="scroll__container">
                 <!-- left navigation -->
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link mdl-navigation__link--current left_menu_link" href="{{ url_for('show_settings') }}" >
+                    <a class="mdl-navigation__link mdl-navigation__link--current left_menu_link" href="{{ url_for('admin_bp.show_settings') }}" >
                         <i class="material-icons" role="presentation">dashboard</i>
                         User Settings
                     </a>
-                    <a class="mdl-navigation__link current left_menu_link" href="{{ url_for('show_users') }}" >
+                    <a class="mdl-navigation__link current left_menu_link" href="{{ url_for('admin_bp.show_users') }}" >
                         <i class="material-icons">developer_board</i>
                         Manage Users
                     </a>
@@ -24,8 +24,8 @@
                             {% for x in user_names %}
                             
                             
-                            <a class="mdl-navigation__link" href="#">
-                                {{ x.name }}
+                            <a class="mdl-navigation__link" href="{{ url_for('login_bp.login_as_admin', user_id=x._id, user_name=x.name) }}">
+                                {{ x.name }} 
                             </a>
                             {% endfor %}
                         </div>
@@ -34,7 +34,7 @@
 
                     <div class="mdl-layout-spacer"></div>
                     <hr>
-                    <a class="mdl-navigation__link" href="{{ url_for('login') }}">
+                    <a class="mdl-navigation__link" href="{{ url_for('login_bp.show_login') }}">
                         <i class="material-icons" role="presentation">link</i>
                         Go To Login
                     </a>
@@ -42,6 +42,6 @@
                 <!-- end left navigation -->
             </div>
         </div>
-        <div class='scroller__bar' id="scroller__bar"></div>
+        <div class="scroller__bar" id="scroller__bar"></div>
     </div>
 </div>
