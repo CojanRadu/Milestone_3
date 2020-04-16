@@ -29,7 +29,6 @@ mongo.init_app(app)
 """ NOT used just an example TODO - test for blueprints """ 
 @app.context_processor
 def all_user_names():
-    #  for post in posts.find({"date": {"$lt": d}}).sort("author")
     user_names = mongo.db.users.find({"name": {"$ne": "admin"}})
     return dict(user_names=user_names)
 

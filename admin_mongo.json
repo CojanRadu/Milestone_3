@@ -1,0 +1,56 @@
+
+
+{"_id":{"$oid":"5e9824dd1c9d4400004db493"},
+"name":"admin",
+"add_date":{"$date":{"$numberLong":"1586275637576"}},
+"last_login":{"$date":{"$numberLong":"1586275637576"}},
+"points":{"$numberInt":"0"},
+"exercise":{
+            "add":{
+                    "opt_nr":{"0":false,"1":false,"2":false,"3":true,"4":true,"5":true,"6":false,"7":true,"8":true,"9":true,"10":true,"11":true,"12":true},
+                    "opt_enabled":true,
+                    "opt_answer_type":{"$numberInt":"3"},
+                    "opt_can_be_inverted":true,
+                    "opt_exercise_nr":{"$numberInt":"5"},
+                    "opt_retry_nr":{"$numberInt":"2"},
+                    "opt_show_hint":true,
+                    "opt_auto_submit":false,
+                    "opt_show_answer":false
+                },
+            "substract":{
+                    "opt_nr":{"0":false,"1":false,"2":false,"3":true,"4":true,"5":true,"6":false,"7":true,"8":true,"9":true,"10":true,"11":true,"12":true},
+                    "opt_enabled":true,
+                    "opt_answer_type":{"$numberInt":"3"},
+                    "opt_can_be_inverted":true,
+                    "opt_exercise_nr":{"$numberInt":"5"},
+                    "opt_retry_nr":{"$numberInt":"2"},
+                    "opt_show_hint":true,
+                    "opt_auto_submit":false,
+                    "opt_show_answer":false
+                },
+            "multiply":{
+                    "opt_nr":{"0":false,"1":false,"2":false,"3":true,"4":true,"5":true,"6":false,"7":true,"8":true,"9":true,"10":true,"11":true,"12":true},
+                    "opt_enabled":true,
+                    "opt_answer_type":{"$numberInt":"3"},
+                    "opt_can_be_inverted":true,
+                    "opt_exercise_nr":{"$numberInt":"5"},
+                    "opt_retry_nr":{"$numberInt":"2"},
+                    "opt_show_hint":true,
+                    "opt_auto_submit":false,
+                    "opt_show_answer":false
+                },
+            "divide":{
+                    "opt_nr":{"0":false,"1":false,"2":false,"3":true,"4":true,"5":true,"6":false,"7":true,"8":true,"9":true,"10":true,"11":true,"12":true},
+                    "opt_enabled":true,
+                    "opt_answer_type":{"$numberInt":"3"},
+                    "opt_can_be_inverted":true,
+                    "opt_exercise_nr":{"$numberInt":"5"},
+                    "opt_retry_nr":{"$numberInt":"2"},
+                    "opt_show_hint":true,
+                    "opt_auto_submit":false,
+                    "opt_show_answer":false
+                    }            
+            }
+}
+
+

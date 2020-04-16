@@ -1,5 +1,5 @@
 {% extends 'admin_base.html'%}
-
+{% set cnt = namespace(value=0) %}
 {% block content %}
 <div class="mdl-grid ui-tables">
 
@@ -16,43 +16,57 @@
                             <th class="mdl-data-table__cell--non-numeric">Name</th>
                             <th class="mdl-data-table__cell--non-numeric">Added Date</th>
                             <th class="mdl-data-table__cell--non-numeric">Last Login</th>
-                            <th class="mdl-data-table__cell--non-numeric">Score</th>
-                            <th class="mdl-data-table__cell--non-numeric">Multiply</th>
-                            <th class="mdl-data-table__cell--non-numeric">Adding</th>
-                            <th class="mdl-data-table__cell--non-numeric">Total Correct</th>
-                            <th class="mdl-data-table__cell--non-numeric">Total Fails</th>
-                            <th class="mdl-data-table__cell--non-numeric">Options</th>
+                            <th class="mdl-data-table__cell--non-numeric">Points</th>
+                            <th class="mdl-data-table__cell--non-numeric"></th>
+                            <th class="mdl-data-table__cell--non-numeric" colspan="4"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for user in users %}
-                        <tr>
-                            <td class="mdl-data-table__cell">5</td>
+                        {% set cnt.value = cnt.value + 1  %}
+                        <tr  id="remove1{{ user._id }}">
+                            <td class="mdl-data-table__cell">{{ cnt.value }}</td>
                             <td class="mdl-data-table__cell--non-numeric">{{ user.name }}</td>
                             <td class="mdl-data-table__cell--non-numeric">{{ user.add_date.strftime("%d %B %Y") }}</td>
-                            <td class="mdl-data-table__cell--non-numeric">{{ user.last_login.strftime("%d %B %Y") }}
-                            </td>
-                            <td class="mdl-data-table__cell--non-numeric">FIX THIS</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ user.last_login.strftime("%d %B %Y") }}</td>
+                            <td class="mdl-data-table__cell--non-numeric">{{ user.points }}</td>
+                            <td class="mdl-data-table__cell">Add</td>
                             <td class="mdl-data-table__cell--non-numeric">
 
-                                {% for mult in user.mult_opt_nr %}
-                                {% if (user.mult_opt_nr[mult] ) %}
-                                {{ mult }} &nbsp;
+                                
+                                {% if (user.exercise.add.opt_enabled) %}
+                                <span class="label label--mini background-color--primary">Enabled</span>
+                                {% else %}
+                                <span class="label label--mini background-color--secondary">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% for mult in user.exercise.add.opt_nr %}
+                                {% if (user.exercise.add.opt_nr[mult] ) %}
+                                <span class="label label--mini color--purple">{{ mult }}</span>
+                                {% else %}
+                                <span class="label label--mini color--dark-gray">{{ mult }}</span>
                                 {% endif %}
                                 {% endfor %}
 
-
                             </td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
-                            <td class="mdl-data-table__cell--non-numeric">English</td>
+                            <td class="mdl-data-table__cell--non-numeric">Ok</td>
                             <td class="mdl-data-table__cell--non-numeric">
                                 <span class="label label--mini label__availability background-color--primary"></span>
                                 <span class="label label--mini label__availability background-color--primary"></span>
                                 <span class="label label--mini label__availability background-color--primary"></span>
                                 <span class="label label--mini label__availability background-color--primary"></span>
                             </td>
+
+
                             <td class="mdl-data-table__cell--non-numeric">
 
+                               
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="mdl-data-table__cell--non-numeric" colspan="5">
                                 {% if user.name != 'admin' %}
                                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-teal" href="{{ url_for('admin_bp.edit_user_settings', user_id=user._id) }}">
                                     Edit Settings
@@ -62,7 +76,7 @@
                                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
                                     id="dialog_{{ user._id }}">Delete</button>
 
-                                <ul class="mdl-menu mdl-menu--top-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
+                                <ul class="mdl-menu mdl-menu--top-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
                                     for="dialog_{{ user._id }}">
                                     <li class="mdl-list__item">
                                         Delete User&nbsp;<strong>{{ user.name }}</strong> ?
@@ -82,7 +96,92 @@
                                 </ul>
                                 {% endif %}
 
+
                             </td>
+                            <td class="mdl-data-table__cell" >Substract</td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% if (user.exercise.substract.opt_enabled) %}
+                                <span class="label label--mini background-color--primary">Enabled</span>
+                                {% else %}
+                                <span class="label label--mini background-color--secondary">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% for mult in user.exercise.substract.opt_nr %}
+                                {% if (user.exercise.substract.opt_nr[mult] ) %}
+                                <span class="label label--mini color--purple">{{ mult }}</span>
+                                {% else %}
+                                <span class="label label--mini color--dark-gray">{{ mult }}</span>
+                                {% endif %}
+                                {% endfor %}
+
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">Ok</td>
+                            <td class="mdl-data-table__cell--non-numeric"> 
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric"></td>
+                        </tr>
+
+
+                       
+                        <tr id="remove2{{ user._id }}">
+                            <td class="mdl-data-table__cell" colspan="5"></td>
+                            <td class="mdl-data-table__cell" >Multiply</td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% if (user.exercise.multiply.opt_enabled) %}
+                                <span class="label label--mini background-color--primary">Enabled</span>
+                                {% else %}
+                                <span class="label label--mini background-color--secondary">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% for mult in user.exercise.multiply.opt_nr %}
+                                {% if (user.exercise.multiply.opt_nr[mult] ) %}
+                                <span class="label label--mini color--purple">{{ mult }}</span>
+                                {% else %}
+                                <span class="label label--mini color--dark-gray">{{ mult }}</span>
+                                {% endif %}
+                                {% endfor %}
+
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">Ok</td>
+                            <td class="mdl-data-table__cell--non-numeric"> 
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric"></td>
+                        </tr>
+                       
+                        <tr id="remove3{{ user._id }}">
+                            <td class="mdl-data-table__cell" colspan="5"></td>
+                            <td class="mdl-data-table__cell" >Divide</td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% if (user.exercise.divide.opt_enabled) %}
+                                <span class="label label--mini background-color--primary">Enabled</span>
+                                {% else %}
+                                <span class="label label--mini background-color--secondary">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {% for mult in user.exercise.divide.opt_nr %}
+                                {% if (user.exercise.divide.opt_nr[mult] ) %}
+                                <span class="label label--mini color--purple">{{ mult }}</span>
+                                {% else %}
+                                <span class="label label--mini color--dark-gray">{{ mult }}</span>
+                                {% endif %}
+                                {% endfor %}
+
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">Ok</td>
+                            <td class="mdl-data-table__cell--non-numeric"> 
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                                <span class="label label--mini label__availability background-color--primary"></span>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric"></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -106,14 +205,29 @@
 
         $('.del-user').click(function() {
             // console.log($(this).attr('id'));
+            
+       
             $(this).closest("tr")
                 .children('td, th')
                 .animate({ margin: 0, padding: '12px 0px' })
                 .wrapInner('<div />')
                 .children()
                 .slideUp(function () { $(this).closest('tr').remove();
-        });
+            });
+            for (i = 1; i<=3; i++) {
+            $('#remove'+i+$(this).attr('id'))
+                .children('td, th')
+                .animate({ margin: 0, padding: '12px 0px' })
+                .wrapInner('<div />')
+                .children()
+                .slideUp(function () {  $('#remove'+i+$(this).attr('id'));
+            });
+            $('#remove'+i+$(this).attr('id')).remove();
+           
+        }
 
+
+        
         $.post("{{ url_for('admin_bp.delete_user') }}", { user_id: $(this).attr('id') })
             .done(function (data) {
                  console.log("Delete Response Was: " + data);

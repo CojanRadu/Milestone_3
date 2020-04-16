@@ -2,7 +2,8 @@
 
 {% block content %}
 {% set cnt = namespace(value=0) %}
-{% set curr_exercise = make_exercise('multiply', user) %}
+{% set ex_type = 'multiply' %}
+{% set curr_exercise = make_exercise(ex_type, user) %}
 
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
     <form action="#" name="ex_form" id="ex_form" method="POST">
@@ -23,15 +24,15 @@
                                 <input type="hidden" name="unicorn_points" value="0">
                             </span>
                         </div>
-                        {% if user.mult_opt_exercise_nr > 0 %}
+                        {% if user['exercise'][ex_type]['opt_exercise_nr'] > 0 %}
                         <div class="mdl-card__menu">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
                                 <span class="mdl-chip__text"> of &nbsp;</span>
                                 <span class="mdl-chip__contact right color--orange"
-                                    id="ex_total_nr">{{user.mult_opt_exercise_nr}}</span>
+                                    id="ex_total_nr">{{ user['exercise'][ex_type]['opt_exercise_nr'] }}</span>
                                 <input type="hidden" name="ex_curr_nr" value="0">
-                                <input type="hidden" name="total_exercise" value="{{user.mult_opt_exercise_nr}}">
+                                <input type="hidden" name="total_exercise" value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
                             </span>
                         </div>
                         {% endif %}
@@ -50,13 +51,13 @@
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <!-- ANSWER FIELD -->
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
-                                id="answer" name="answer" autofocus {% if user.mult_opt_show_answer %}
+                                id="answer" name="answer" autofocus {% if user['exercise'][ex_type]['opt_show_answer'] %}
                                 placeholder="{{ curr_exercise[2] }}" {% endif %} readonly>
                             <!-- END ASNSWER FIELD  -->
                             <label class="mdl-textfield__label" for="answer"><span
                                     class="ex_0">{{ curr_exercise[0] }}</span><i
                                     class="material-icons operation-icon-small">clear</i><span
-                                    class="ex_1">{{ curr_exercise[1] }} =</span>{% if user.mult_opt_show_answer %}
+                                    class="ex_1">{{ curr_exercise[1] }} =</span>{% if user['exercise'][ex_type]['opt_show_answer'] %}
                                 {{ curr_exercise[2] }} {% endif %}
                             </label>
                             <span class="mdl-textfield__error">Input is not a number!</span>
@@ -68,7 +69,7 @@
 
 
                     </div>
-                    {% if (user.mult_opt_auto_submit == False and user.mult_opt_answer_type > 1) %}
+                    {% if (user['exercise'][ex_type]['opt_auto_submit'] == False and user['exercise'][ex_type]['opt_answer_type'] > 1) %}
                     <div class="mdl-card__actions">
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green "
                             id="submit_form">
@@ -83,7 +84,7 @@
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title"> <span class="title_span">Retry</span>
                         <!-- show hint -->
-                        {% if user.mult_opt_show_hint %}
+                        {% if user['exercise'][ex_type]['opt_show_hint'] %}
                         <div id="show_hint">
 
                             <a style="cursor: pointer; font-weight: 400;" id="hint_link">
@@ -110,14 +111,14 @@
 
                         </div>
                         {% endif %}
-                        {% if user.mult_opt_retry_nr > 1 %}
+                        {% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}
                         <!-- retry  -->
                         <div class="mdl-card__menu">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
                                 <span class="mdl-chip__text"> of &nbsp;</span>
                                 <span class="mdl-chip__contact right color--orange"
-                                    id="ex_total_retry">{{user.mult_opt_retry_nr}}</span>
+                                    id="ex_total_retry">{{ user['exercise'][ex_type]['opt_retry_nr'] }}</span>
                                 <input type="hidden" name="ex_retry" value="0">
                             </span>
                         </div>
@@ -126,7 +127,7 @@
                     <div class="mdl-card__supporting-text mdl-card--expand">
 
                         <!-- start keypad -->
-                        {% if user.mult_opt_answer_type == 1 %}
+                        {% if user['exercise'][ex_type]['opt_answer_type'] == 1 %}
                         <div class="grid">
                             {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
                             {% for b_nr in all_buttons %}
@@ -203,7 +204,7 @@
             let val = $(this).attr('data-nr');
             if ($.isNumeric(val)) {
                 let new_val = $('#answer').val() + val;
-                {% if user.mult_opt_auto_submit %}
+                {% if user['exercise'][ex_type]['opt_retry_auto_submit'] %}
                 if ($('#correct_answer').val() == new_val) {
                     console.log('correct');
                     // set_unicorn_points();
@@ -245,7 +246,7 @@
             console.log((el1).val());
             $('#answer').val((el1).val());
             // for checkboxes auto-submit enabled - will submit correct AND wrong answer
-            {% if user.mult_opt_auto_submit %}
+            {% if user['exercise'][ex_type]['opt_auto_submit'] %}
             setTimeout(submit_form, 500);
             return;
             {% endif %}
@@ -275,11 +276,11 @@
             $('#correct_answer').val(response[2]);
 
             // $('.ex_2').val(response[2]);
-            {% if user.mult_opt_show_answer %}
+            {% if user['exercise'][ex_type]['opt_show_answer'] %}
             $('.ex_2').attr("placeholder", response[2]);
             {% endif %}
 
-            {% if user.mult_opt_answer_type > 1 %}
+            {% if user['exercise'][ex_type]['opt_answer_type'] > 1 %}
             let options = response[4];
             console.log((options.length));
             for (let i = 1; i <= (options.length); i++) {
