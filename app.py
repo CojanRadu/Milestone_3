@@ -26,7 +26,7 @@ app.secret_key = "randstring12345"
 mongo.init_app(app)
 
 
-""" NOT used just an example TODO - test for blueprints """ 
+
 @app.context_processor
 def all_user_names():
     user_names = mongo.db.users.find({"name": {"$ne": "admin"}})

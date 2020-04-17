@@ -2,15 +2,16 @@
 
 {% block content %}
 {% set cnt = namespace(value=0) %}
-{% set ex_type = 'multiply' %}
+{% set ex_type = 'add' %}
 {% set curr_exercise = make_exercise(ex_type, user) %}
 
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
     <form action="#" name="ex_form" id="ex_form" method="POST">
-        <h4>Is new user: {{ session['u_new'] }} </h4>
-        <input type="hidden" name="type" value="multiply">
+        <h4>Is new user: {{ session['u_new'] }} Exercise type: <span id="temp_ex_type">{{ ex_type }} </span></h4>
+        <input type="hidden" name="ex_type" id="ex_type" value="{{ ex_type }}">
         <input type="hidden" name="nr_1" value="{{ curr_exercise[0] }}">
         <input type="hidden" name="nr_2" value="{{ curr_exercise[1] }}">
+
 
         <div class="mdl-grid ui-cards">
             <div class="mdl-cell mdl-cell--2-col-phone">
@@ -32,32 +33,38 @@
                                 <span class="mdl-chip__contact right color--orange"
                                     id="ex_total_nr">{{ user['exercise'][ex_type]['opt_exercise_nr'] }}</span>
                                 <input type="hidden" name="ex_curr_nr" value="0">
-                                <input type="hidden" name="total_exercise" value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
+                                <input type="hidden" name="total_exercise"
+                                    value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
                             </span>
                         </div>
                         {% endif %}
                     </div>
                     <div class="mdl-card__supporting-text mdl-card--expand">
-                        <small>small text</small>
+
+                        <!-- <small>small text</small>
                         regular text
                         <br><br>
-                        <b>etc</b>
+                        <b>etc</b> -->
+
                         <h2 style="text-align: center;">
                             <span class="ex_0">{{ curr_exercise[0] }}</span>
-                            <i class="material-icons operation-icon">clear</i>
-                            <span class="ex_1">{{ curr_exercise[1] }} = </span></h2>
+                            <span class="ex_3">{{ curr_exercise[3] }}</span>
+                            <span class="ex_1">{{ curr_exercise[1] }} = </span>
+                        </h2>
 
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <!-- ANSWER FIELD -->
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
-                                id="answer" name="answer" autofocus {% if user['exercise'][ex_type]['opt_show_answer'] %}
+                                id="answer" name="answer" autofocus
+                                {% if user['exercise'][ex_type]['opt_show_answer'] %}
                                 placeholder="{{ curr_exercise[2] }}" {% endif %} readonly>
                             <!-- END ASNSWER FIELD  -->
                             <label class="mdl-textfield__label" for="answer"><span
-                                    class="ex_0">{{ curr_exercise[0] }}</span><i
-                                    class="material-icons operation-icon-small">clear</i><span
-                                    class="ex_1">{{ curr_exercise[1] }} =</span>{% if user['exercise'][ex_type]['opt_show_answer'] %}
+                                    class="ex_0">{{ curr_exercise[0] }}</span>
+                                    <span class="ex_3">{{ curr_exercise[3] }}</span>
+                                    <span class="ex_1">{{ curr_exercise[1] }} =</span>
+                                    {% if user['exercise'][ex_type]['opt_show_answer'] %}
                                 {{ curr_exercise[2] }} {% endif %}
                             </label>
                             <span class="mdl-textfield__error">Input is not a number!</span>
@@ -103,8 +110,8 @@
                                 <li class="ml15"><strong>Multiply by {{ curr_exercise[3] }}</strong></li>
                                 {% for n in range(1,13) %}
                                 <li class="mdl-list__item  hint">
-                                    {{ curr_exercise[3] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
-                                    {{ curr_exercise[3] * n }}
+                                    {{ curr_exercise[4] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
+                                    {{ curr_exercise[4] * n }}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -158,7 +165,7 @@
                         </div>
                         {% else %}
 
-                        {% for x in curr_exercise[4] %}
+                        {% for x in curr_exercise[5] %}
                         <label
                             class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
                             for="switchX{{ loop.index }}">
@@ -166,23 +173,23 @@
                                 name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
                                 value="{{ x }}">
                             <span class="mdl-switch__label">
-                                <span class="big-label" id="checkbox_answer{{ loop.index }}"> 
+                                <span class="big-label" id="checkbox_answer{{ loop.index }}">
                                     {% set len2 = x|string|length %}
                                     {% set len = len2|int %}
                                     {%if len == 3 %}
-                                        {{ "{:>2}".format(x)|replace(" ", "&nbsp;")|safe }}
-                                    {% endif %} 
+                                    {{ "{:>2}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {% endif %}
                                     {% if len == 2%}
-                                        {{ "{:>4}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {{ "{:>4}".format(x)|replace(" ", "&nbsp;")|safe }}
                                     {% endif %}
                                     {% if len == 1%}
-                                        {{ "{:>5}".format(x)|replace(" ", "&nbsp;")|safe }}
-                                    {% endif %} 
+                                    {{ "{:>5}".format(x)|replace(" ", "&nbsp;")|safe }}
+                                    {% endif %}
                                 </span>
                             </span>
 
                         </label>
-                        
+
 
                         {% set cnt.value = cnt.value + 1  %}
                         {% endfor %}
@@ -199,6 +206,15 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
+
+    $('.mdl-layout__tab-manual-switch').click(function () {
+        if (!$(this).hasClass('is-active')) {
+            // console.log($(this).prop('id'));
+            ex_type = $(this).prop('id');
+            get_new_exercise(ex_type);
+        }
+    })
+
     $(document).ready(function () {
         $(".keypad").click(function () {
             let val = $(this).attr('data-nr');
@@ -264,16 +280,23 @@
         })
     });
 
-    function get_new_exercise() {
-        $.get("{{ url_for('exercise_bp.get_exercise') }}", function (data) {
+    function get_new_exercise(ex_type) {
+        console.log(ex_type);
+
+        $.get( "{{ url_for('exercise_bp.get_exercise') }}", { ex_type: ex_type } )
+        .done(function( data ) {
+      
             let response = jQuery.parseJSON(data)
             // $('#answer').val(response[0]);
             $('.ex_0').html(response[0]);
             $('.ex_1').html(response[1] + ' = ');
+            $('.ex_3').html(response[3]);
             $('#answer').val('');
             $('#hint_nr').html('0');
             $('#ex_retry').html('1');
             $('#correct_answer').val(response[2]);
+            $('#temp_ex_type').html(ex_type);
+            $('#ex_type').val(ex_type);
 
             // $('.ex_2').val(response[2]);
             {% if user['exercise'][ex_type]['opt_show_answer'] %}
@@ -295,27 +318,11 @@
         });
     }
 
-    // https://css-tricks.com/snippets/jquery/serialize-form-to-json/
-    $.fn.serializeObject = function () {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function () {
-            if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    };
+
 
     function submit_answer() {
 
         var str = $("#ex_form").serializeArray();
-        // let data_object = $('#ex_form').serializeObject();
         let data_object = $("#ex_form").serialize();
         // event.preventDefault();
         console.log(data_object);
@@ -331,7 +338,8 @@
                 set_chip('unicorn_points');
                 set_chip('ex_curr_nr');
                 submit_answer();
-                get_new_exercise();
+                ex_type = $('#ex_type').val();
+                get_new_exercise(ex_type);
                 $("#answer").focus();
                 // console.log('PARSE INT ' + parseInt($('#ex_retry').html()) + ' >= ' + parseInt($('#ex_total_retry').html()));
             } else {

@@ -2,9 +2,10 @@ import random
 
 def make_exercise(action, user):
     use_nr = []
-    # print(str(user['mult_opt_nr']))
-    for nr in user['exercise']['add']['opt_nr']:
-        if (user['exercise']['add']['opt_nr'][nr]):
+    new_list = []
+
+    for nr in user['exercise'][action]['opt_nr']:
+        if (user['exercise'][action]['opt_nr'][nr]):
             use_nr.append(nr)
 
     a_temp = random.randint(0, len(use_nr)-1)
@@ -14,26 +15,37 @@ def make_exercise(action, user):
     hint = int(a)
     keep_b = int(b)
 
-    if user['exercise']['add']['opt_can_be_inverted']:
+    if user['exercise'][action]['opt_can_be_inverted']:
         x = random.randint(0, 1)
         if x:
             a, b = b, a
 
-    c = int(a)*int(b)
+    
 
     """ generate options """
-    if user['exercise']['add']['opt_answer_type'] > 1:
-        rand_range = 2*user['exercise']['add']['opt_answer_type']
+    if user['exercise'][action]['opt_answer_type'] > 1:
+        rand_range = 2*user['exercise'][action]['opt_answer_type']
         range_low = hint - random.randint(1, rand_range)
         low = range_low if range_low > 0 else 1
         options = random.sample(
-            range(low, low+rand_range), user['exercise']['add']['opt_answer_type'])
+            range(low, low+rand_range), user['exercise'][action]['opt_answer_type'])
         if not (keep_b in options):
             options.pop(0)
             options.insert(0, keep_b)
             random.shuffle(options)
         new_list = [x*hint for x in options]
 
-    mult_tuple = [int(a), int(b), c, hint, new_list] if action == 'multiply' else [4, 5, 6]
+    if action == 'add':
+        c = int(a)+int(b)
+        my_tuple = [int(a), int(b), c, '+', hint, new_list] 
+    elif action == 'substract':
+        c = int(a)+int(b)
+        my_tuple = [c, int(a), int(b), '-', hint, new_list]    
+    elif action == 'multiply':
+        c = int(a)*int(b)
+        my_tuple = [int(a), int(b), c, '*', hint, new_list] 
+    else:
+        c = int(a)*int(b)
+        my_tuple = [c, int(a), int(b), ':', hint, new_list]
 
-    return mult_tuple
+    return my_tuple

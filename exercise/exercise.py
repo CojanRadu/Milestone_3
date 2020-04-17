@@ -3,7 +3,7 @@ from datetime import datetime, date
 from bson.objectid import ObjectId
 import json
 from six.moves import urllib
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 
 from database import mongo
 from exercise.exercise_funct import make_exercise
@@ -18,11 +18,15 @@ exercise_bp = Blueprint('exercise_bp', __name__,
 def show_login():
     return render_template('login/login.html')
 
-@exercise_bp.route('/get_exercise')
+@exercise_bp.route('/get_exercise', methods=['POST', 'GET'])
 def get_exercise():
+    parsed = urlparse(str(request))
+
+    ex_type = str(parse_qs(parsed.query)['ex_type'][0]).replace("' [GET]>", "")
     user = mongo.db.users.find_one({"_id": ObjectId(session['u_id'])})
-    a = make_exercise('multiply', user)
+    a = make_exercise(ex_type, user)
     return json.dumps(a)
+
 
 
 @exercise_bp.route('/submit_answer', methods=['POST', 'GET'])

@@ -18,8 +18,35 @@
 </head>
 
 <body>
-   
-    {% block content %} {% endblock %}
+
+
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+            mdl-layout--fixed-tabs">
+        <header class="mdl-layout__header">
+
+            <!-- Tabs -->
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-js-tabs">
+                <a href="#fixed-tab-1" class="mdl-layout__tab is-active mdl-layout__tab-manual-switch" id="add">Add</a>
+                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="substract">Substract</a>
+                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="multiply">Multiply</a>
+                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="divide">Divide</a>
+                <a class="mdl-layout__tab_disable ">Disable</a>
+            </div>
+        </header>
+
+        <main class="mdl-layout__content">
+            <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
+                <div class="page-content">
+
+                    {% block content %} {% endblock %}
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+
 
 
     <script src="{{url_for('static', filename='js/d3.min.js')}}"></script>
@@ -28,6 +55,11 @@
     <script src="{{url_for('static', filename='js/nv.d3.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/layout/layout.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/scroll/scroll.min.js')}}"></script>
+
+    <script>
+
+
+    </script>
 </body>
 
 </html>
