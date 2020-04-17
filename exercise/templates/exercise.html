@@ -2,12 +2,12 @@
 
 {% block content %}
 {% set cnt = namespace(value=0) %}
-{% set ex_type = 'add' %}
+{% set ex_type = first_option %}
 {% set curr_exercise = make_exercise(ex_type, user) %}
 
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
     <form action="#" name="ex_form" id="ex_form" method="POST">
-        <h4>Is new user: {{ session['u_new'] }} Exercise type: <span id="temp_ex_type">{{ ex_type }} </span></h4>
+        <h4>Is new user: {{ session['u_new'] }} Exercise type: <span id="temp_ex_type">{{ ex_type }}</span></h4>
         <input type="hidden" name="ex_type" id="ex_type" value="{{ ex_type }}">
         <input type="hidden" name="nr_1" value="{{ curr_exercise[0] }}">
         <input type="hidden" name="nr_2" value="{{ curr_exercise[1] }}">
@@ -17,7 +17,7 @@
             <div class="mdl-cell exercise mdl-cell--2-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
-                        <span class="title_span">Exercise</span>
+                        <span class="title_span">{% if user['exercise'][ex_type]['opt_exercise_nr'] > 0 %}Exercise{% endif %}</span>
                         <div class="mdl-card__menu" style="left: 16px; right:unset;">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="unicorn_points">0</span>
@@ -89,10 +89,10 @@
             </div>
             <div class="mdl-cell exercise mdl-cell--2-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__title"> <span class="title_span">Retry</span>
+                    <div class="mdl-card__title"> <span class="title_span">{% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}Retry{% endif %}</span>
                         <!-- show hint -->
                         {% if user['exercise'][ex_type]['opt_show_hint'] %}
-                        <div id="show_hint">
+                        <div id="show_hint" class="hint-container">
 
                             <a style="cursor: pointer; font-weight: 400;" id="hint_link">
                                 <div class="mdl-card__menu" style="left: 16px; right:unset;">
@@ -106,18 +106,17 @@
                             </a>
 
                             <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
-                                for="show_hint" style="transform-origin: -100% 0">
-                                <li class="ml15"><strong>Multiply by {{ curr_exercise[3] }}</strong></li>
-                                {% for n in range(1,13) %}
-                                <li class="mdl-list__item  hint">
-                                    {{ curr_exercise[4] }} x {% if n<10 %} &nbsp; {% endif%} {{ n }} =
-                                    {{ curr_exercise[4] * n }}
-                                </li>
+                                for="show_hint" id="hint_content">
+                                <li class="mdl-list__item hint">Hint</li>
+                                {% for n in curr_exercise[4] %}
+                                <li class="mdl-list__item  hint">{{ n }}</li>
                                 {% endfor %}
                             </ul>
 
                         </div>
                         {% endif %}
+                        
+
                         {% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}
                         <!-- retry  -->
                         <div class="mdl-card__menu">
@@ -203,10 +202,11 @@
     </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- NOT USED SO FAR !!!!!!! TODO check on it -->
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
-
     $('.mdl-layout__tab-manual-switch').click(function () {
         if (!$(this).hasClass('is-active')) {
             // console.log($(this).prop('id'));
@@ -280,43 +280,50 @@
         })
     });
 
+    // gets new exercie values, answer, hint, checkbox values, user options for exercise type
     function get_new_exercise(ex_type) {
-        console.log(ex_type);
+        // console.log(ex_type);
 
         $.get( "{{ url_for('exercise_bp.get_exercise') }}", { ex_type: ex_type } )
         .done(function( data ) {
-      
-            let response = jQuery.parseJSON(data)
-            // $('#answer').val(response[0]);
+            let response = jQuery.parseJSON(data);
+            let user_options = response[6];
+            console.log(user_options);
+
+            // set nex exercise values and reset hint and retry 
             $('.ex_0').html(response[0]);
             $('.ex_1').html(response[1] + ' = ');
             $('.ex_3').html(response[3]);
-            $('#answer').val('');
             $('#hint_nr').html('0');
             $('#ex_retry').html('1');
+            $('#temp_ex_type').html(ex_type); // TODO remove this
+
+            $('#answer').val('');
             $('#correct_answer').val(response[2]);
-            $('#temp_ex_type').html(ex_type);
             $('#ex_type').val(ex_type);
 
-            // $('.ex_2').val(response[2]);
-            {% if user['exercise'][ex_type]['opt_show_answer'] %}
-            $('.ex_2').attr("placeholder", response[2]);
-            {% endif %}
+            $('#hint_content').html('<li class="mdl-list__item hint">Hint</li><li class="mdl-list__item  hint">'+response[4].join('</li><li class="mdl-list__item  hint">'));
 
-            {% if user['exercise'][ex_type]['opt_answer_type'] > 1 %}
-            let options = response[4];
-            console.log((options.length));
-            for (let i = 1; i <= (options.length); i++) {
-                $('#checkbox_answer' + i).html('&nbsp;' + options[(i - 1)]);
-                the_switch = $('#switchX' + i);
-                the_switch.val(options[(i - 1)]);
-                if (the_switch.prop('checked')) {
-                    the_switch.trigger('click');
+            // show answer if option
+           if (user_options['opt_show_answer'])  $('.ex_2').attr("placeholder", response[2]);
+           else $('.ex_2').attr("placeholder", '');
+
+            // update radio boxes values for multiple answer types (3 or 5)
+            if (user_options['opt_answer_type'] > 1) {
+                let options = response[4];
+                // console.log((options.length));
+                for (let i = 1; i <= (options.length); i++) {
+                    $('#checkbox_answer' + i).html('&nbsp;' + options[(i - 1)]);
+                    the_switch = $('#switchX' + i);
+                    the_switch.val(options[(i - 1)]);
+                    if (the_switch.prop('checked')) {
+                        the_switch.trigger('click');
+                    }
                 }
             }
-            {% endif %}
+
         });
-    }
+    } //end get_new_exercise
 
 
 

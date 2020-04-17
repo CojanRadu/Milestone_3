@@ -101,8 +101,14 @@
     text-align: center;
     font-weight: 500;
     font-size: 14px;
-    color: rgba(255, 255, 255, .6);
+    color: rgba(255, 255, 255, 0.192);
     overflow: hidden;
     line-height: 48px;
     width: auto;
+}
+.hint-container {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+   height: 50px;
 }

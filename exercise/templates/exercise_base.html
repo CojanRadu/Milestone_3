@@ -27,10 +27,39 @@
 
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-js-tabs">
-                <a href="#fixed-tab-1" class="mdl-layout__tab is-active mdl-layout__tab-manual-switch" id="add">Add</a>
-                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="substract">Substract</a>
-                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="multiply">Multiply</a>
-                <a href="#fixed-tab-1" class="mdl-layout__tab mdl-layout__tab-manual-switch" id="divide">Divide</a>
+                {% if (user.exercise.add.opt_enabled) %}
+                    {% set first_option = 'add' %}
+                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if (user.exercise.add.opt_enabled) %} is-active {% endif %} mdl-layout__tab-manual-switch" id="add">Add</a>
+                    {% else %}
+                    <a class="mdl-layout__tab_disable">Add</a>
+                    {% endif %}
+                {% if (user.exercise.substract.opt_enabled) %}
+                        
+                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="substract">Substract</a>
+                    {% if first_option is not defined %}
+                    {% set first_option = 'substract' %}
+                    {%endif%}
+                    {% else %}
+                    <a class="mdl-layout__tab_disable">Substract</a>
+                {% endif %}
+                {% if (user.exercise.multiply.opt_enabled) %}
+                   
+                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="multiply">Multiply</a>
+                    {% if first_option is not defined %}
+                    {% set first_option = 'multiply' %}
+                    {% endif %}
+                    {% else %}
+                    <a class="mdl-layout__tab_disable">Multiply</a>
+                {% endif %}
+                {% if (user.exercise.divide.opt_enabled) %}
+                   
+                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="divide">Divide</a>
+                    {% if first_option is not defined %}
+                    {% set first_option = 'divide' %}
+                    {% endif %}
+                    {% else %}
+                    <a class="mdl-layout__tab_disable">Divide</a>
+                {% endif %}
                 <a class="mdl-layout__tab_disable ">Disable</a>
             </div>
         </header>

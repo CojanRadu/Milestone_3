@@ -1,12 +1,28 @@
 import random
+import json
+from types import SimpleNamespace
+from collections import namedtuple
 
 def make_exercise(action, user):
     use_nr = []
-    new_list = []
+    checkbox_options = []
+    all_hint = []
+    dict_user_options= {}
 
     for nr in user['exercise'][action]['opt_nr']:
         if (user['exercise'][action]['opt_nr'][nr]):
             use_nr.append(nr)
+
+    for option in user['exercise'][action]:
+        if ((option != 'opt_nr') and (option != 'opt_can_be_inverted')):
+            dict_user_options[option] = user['exercise'][action][option]
+
+    print(dict_user_options)
+    print(user['name'])
+    # SimpleNamespace(**dict_user_options)
+    # tuple_user_options = namedtuple('MyNamedTuple', dict_user_options.keys())(**dict_user_options)
+    # tuple_user_options = json.dumps(dict_user_options)
+    # print(tuple_user_options)
 
     a_temp = random.randint(0, len(use_nr)-1)
     a = use_nr[a_temp]
@@ -33,19 +49,33 @@ def make_exercise(action, user):
             options.pop(0)
             options.insert(0, keep_b)
             random.shuffle(options)
-        new_list = [x*hint for x in options]
+        checkbox_options = [x*hint for x in options]
+
+    """ generate hint """    
+    
+
 
     if action == 'add':
         c = int(a)+int(b)
-        my_tuple = [int(a), int(b), c, '+', hint, new_list] 
+        for n in range(1,13):
+            all_hint.append(str(a) + ' + ' + str(n) + ' = ' + str(int(a)+int(n)))
+        my_tuple = [int(a), int(b), c, '+', all_hint, checkbox_options, dict_user_options] 
     elif action == 'substract':
         c = int(a)+int(b)
-        my_tuple = [c, int(a), int(b), '-', hint, new_list]    
+        for n in range(1,13):
+            if (c - n >= 0 ):
+                all_hint.append(str(c) + ' - ' + str(n) + ' = ' + str(c - n ))
+        my_tuple = [c, int(a), int(b), '-', all_hint, checkbox_options, dict_user_options]    
     elif action == 'multiply':
         c = int(a)*int(b)
-        my_tuple = [int(a), int(b), c, '*', hint, new_list] 
+        for n in range(1,13):
+            all_hint.append(str(a) + ' * ' + str(n) + ' = ' + str(int(a)*int(n)))
+        my_tuple = [int(a), int(b), c, '*', all_hint, checkbox_options, dict_user_options] 
     else:
         c = int(a)*int(b)
-        my_tuple = [c, int(a), int(b), ':', hint, new_list]
+        for n in range(1,13):
+            if (c % n == 0):
+                all_hint.append(str(c) + ' / ' + str(n) + ' = ' + str(int(c / n)))
+        my_tuple = [c, int(a), int(b), '/', all_hint, checkbox_options, dict_user_options]
 
     return my_tuple
