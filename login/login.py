@@ -21,6 +21,11 @@ def show_login():
 def login_as_admin(user_id, user_name):
     session["u_id"] = user_id
     return redirect(url_for('exercise_bp.exercise', username=user_name))
+
+@login_bp.route('/_logout_action')
+def do_logout():
+    session.clear()
+    return redirect('/login')
  
 @login_bp.route('/_login_action',  methods=["POST"])
 def do_login():

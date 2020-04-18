@@ -18,24 +18,33 @@ ex_types = list(('add', 'substract', 'multiply', 'divide'))
 #     user = 'aa'
 #     return render_template('admin/show_settings.html', user=user)
 
-@admin_bp.route('/admin/show_users')
+@admin_bp.route('/search_user', methods=['POST'])
+def search_user():
+    search_str = str(request.form['search_user'])
+    user = mongo.db.users.find_one({"name":  {'$regex': search_str}})
+    if user:
+        return render_template('show_settings.html', user=user,  ex=ex_types)
+    else: 
+        return redirect(url_for('admin_bp.show_users'))
+
+@admin_bp.route('/show_users')
 def show_users():
     all_users = mongo.db.users.find()
     return render_template('show_users.html', users=all_users)
 
-@admin_bp.route('/admin/show_settings')
+@admin_bp.route('/show_settings')
 def show_settings():
     admin_user = mongo.db.users.find_one({"name": "admin"})
     # print(type(admin_user))
     return render_template('show_settings.html', user=admin_user, ex=ex_types)    
 
-@admin_bp.route('/admin/edit_user_settings/<user_id>')
+@admin_bp.route('/edit_user_settings/<user_id>')
 def edit_user_settings(user_id):
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     return render_template('show_settings.html', user=user,  ex=ex_types)    
 
 
-@admin_bp.route('/admin/delete_user', methods=['POST'])
+@admin_bp.route('/delete_user', methods=['POST'])
 def delete_user():
     mongo.db.users.remove({'_id': ObjectId(request.form['user_id'])})
     mongo.db.exercise.remove({'user_id': request.form['user_id']})

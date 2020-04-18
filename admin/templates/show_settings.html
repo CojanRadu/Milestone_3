@@ -67,7 +67,7 @@
                                         for="{{ one_ex }}-switch-inverted">
                                         <input type="checkbox" id="{{ one_ex }}-switch-inverted" class="mdl-switch__input"
                                             name="inverted" {% if user.exercise[one_ex].opt_can_be_inverted %} checked=""
-                                            {% endif %}>
+                                            {% endif %}   {% if ((one_ex == 'substract' ) or (one_ex == 'divide' )) %} disabled {% endif %}>
                                         <div class="mdl-switch__track"></div>
                                         <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
                                         </div>

@@ -60,7 +60,7 @@
                     {% else %}
                     <a class="mdl-layout__tab_disable">Divide</a>
                 {% endif %}
-                <a class="mdl-layout__tab_disable ">Disable</a>
+                <a class="mdl-layout__tab_disable" href="{{url_for('login_bp.do_logout')}}">Log Out</a>
             </div>
         </header>
 

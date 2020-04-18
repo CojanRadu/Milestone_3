@@ -133,12 +133,11 @@
                     <div class="mdl-card__supporting-text mdl-card--expand">
 
                         <!-- start keypad -->
-                        {% if user['exercise'][ex_type]['opt_answer_type'] == 1 %}
-                        <div class="grid">
+                        
+                        <div class="grid {% if user['exercise'][ex_type]['opt_answer_type'] != 1 %} hidden_content {% endif %}" id="show_keypad">
                             {% set all_buttons=[7,8,9,4,5,6,1,2,3,'undo',0,'ok'] %}
                             {% for b_nr in all_buttons %}
                             <div class="cell">
-
                                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect 
                             {% if (b_nr == 'ok') %} 
                                 button--colored-green
@@ -148,52 +147,42 @@
                                         {% else %}
                                         button--colored-light-blue
                                     {% endif %}
-                                
                             {% endif %}    
-
-                            
                             keypad" data-nr="{{ b_nr }}">
                                     {% if b_nr != 'undo' %} {{ b_nr }}
                                     {% else  %} <i class="material-icons operation-icon undo">undo</i>
                                     {% endif %}
                                 </a>
-
                             </div>
-
                             {% endfor %}
                         </div>
-                        {% else %}
+                        
+                        
+                        
+                        
+                        <!-- checkbox answers  -->
+                        <div class="{% if user['exercise'][ex_type]['opt_answer_type'] == 1 %} hidden_content {% endif %}" id="show_check_options">
 
-                        {% for x in curr_exercise[5] %}
+                            {% for i in range(0, 5) %}
+                            {% set x = curr_exercise[5][i] %}
                         <label
-                            class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect"
-                            for="switchX{{ loop.index }}">
-                            <input type="checkbox" id="switchX{{ loop.index }}" class="mdl-switch__input"
-                                name="switch{{ loop.index }}" {% if loop.index == 12345 %} checked="" {% endif %}
+                            class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect {% if user['exercise'][ex_type]['opt_answer_type'] <= i %} hidden  {% endif %} "
+                            for="switchX{{ i }}">
+                            <input type="checkbox" id="switchX{{ i }}" class="mdl-switch__input"
+                                name="switch{{ i }}" {% if loop.index == 12345 %} checked="" {% endif %}
                                 value="{{ x }}">
                             <span class="mdl-switch__label">
-                                <span class="big-label" id="checkbox_answer{{ loop.index }}">
-                                    {% set len2 = x|string|length %}
-                                    {% set len = len2|int %}
-                                    {%if len == 3 %}
-                                    {{ "{:>2}".format(x)|replace(" ", "&nbsp;")|safe }}
-                                    {% endif %}
-                                    {% if len == 2%}
-                                    {{ "{:>4}".format(x)|replace(" ", "&nbsp;")|safe }}
-                                    {% endif %}
-                                    {% if len == 1%}
-                                    {{ "{:>5}".format(x)|replace(" ", "&nbsp;")|safe }}
-                                    {% endif %}
-                                </span>
+                                <span class="big-label" id="checkbox_answer{{ i }}">{{ x }}</span>
                             </span>
 
                         </label>
 
-
-                        {% set cnt.value = cnt.value + 1  %}
                         {% endfor %}
-                        {% endif %}
-                        <!-- end keypad -->
+                        </div>
+
+                       
+                        
+                        
                     </div>
 
                 </div>
@@ -304,22 +293,38 @@
 
             $('#hint_content').html('<li class="mdl-list__item hint">Hint</li><li class="mdl-list__item  hint">'+response[4].join('</li><li class="mdl-list__item  hint">'));
 
+                      
+
             // show answer if option
            if (user_options['opt_show_answer'])  $('.ex_2').attr("placeholder", response[2]);
            else $('.ex_2').attr("placeholder", '');
 
             // update radio boxes values for multiple answer types (3 or 5)
             if (user_options['opt_answer_type'] > 1) {
-                let options = response[4];
-                // console.log((options.length));
-                for (let i = 1; i <= (options.length); i++) {
-                    $('#checkbox_answer' + i).html('&nbsp;' + options[(i - 1)]);
+                let options = response[5];
+                 console.log((options));
+                for (let i = 0; i <= (options.length); i++) { 
+                    $('#checkbox_answer' + i).html(options[i]);
                     the_switch = $('#switchX' + i);
-                    the_switch.val(options[(i - 1)]);
+                    the_switch.val(options[i]);
                     if (the_switch.prop('checked')) {
                         the_switch.trigger('click');
                     }
                 }
+            if (user_options['opt_answer_type'] == 3) {
+                $('label[for="switchX3"]').addClass('hidden');
+                $('label[for="switchX4"]').addClass('hidden');
+            }
+            else if (user_options['opt_answer_type'] == 5) {
+                $('label[for="switchX3"]').removeClass('hidden');
+                $('label[for="switchX4"]').removeClass('hidden');
+            }
+
+            $('#show_keypad').hide();
+            $('#show_check_options').show();    
+            } else {
+            $('#show_check_options').hide(); 
+            $('#show_keypad').show();
             }
 
         });
