@@ -67,19 +67,21 @@ def make_exercise(action, user):
         for n in range(1,13):
             all_hint.append(str(a) + ' * ' + str(n) + ' = ' + str(int(a)*int(n)))
         my_tuple = [int(a), int(b), c, '*', all_hint, checkbox_options, dict_user_options]   
-    else:      
+    elif action == 'divide':   
         c = int(a)*int(b)   
         checkbox_options = [x for x in options]
+        print(str(options))
+        print(user['exercise'][action]['opt_answer_type'])
         for n in range(1,13):
             if (c % n == 0):
                 all_hint.append(str(c) + ' / ' + str(n) + ' = ' + str(int(c / n)))
         my_tuple = [c, int(a), int(b), '/', all_hint, checkbox_options, dict_user_options]
     
-        # if not (c in checkbox_options):
-        #     print(checkbox_options)
-        #     checkbox_options.pop(0)
-        #     checkbox_options.insert(0, c)
-        #     print(checkbox_options)
-        # random.shuffle(checkbox_options)
+    # if not (c in checkbox_options):
+    #     print(checkbox_options)
+    #     checkbox_options.pop(0)
+    #     checkbox_options.insert(0, c)
+    #     print(checkbox_options)
+    # random.shuffle(checkbox_options)
 
     return my_tuple

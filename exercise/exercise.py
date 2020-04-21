@@ -27,6 +27,17 @@ def get_exercise():
     a = make_exercise(ex_type, user)
     return json.dumps(a)
 
+@exercise_bp.route('/add_point', methods=['POST', 'GET'])
+def add_point():
+    parsed = urlparse(str(request))
+
+    user = str(parse_qs(parsed.query)['user_id'][0]).replace("' [GET]>", "")
+    myquery = {'_id': ObjectId(user)}
+    newvalues = {'$inc': { 'points' : +1 } }
+    mongo.db.users.update_one(myquery, newvalues)
+
+    print(str(request))
+    return 'Add Point'
 
 
 @exercise_bp.route('/submit_answer', methods=['POST', 'GET'])

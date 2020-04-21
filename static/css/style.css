@@ -22,8 +22,7 @@
 }
 .cell {
     float: left;
-    margin: 7px;
-}
+ }
 .mdl-cell {
     min-width: 400px;
 }

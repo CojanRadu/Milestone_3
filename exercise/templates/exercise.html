@@ -8,25 +8,28 @@
 <div class="mdl-layout mdl-js-layout color--gray is-small-screen">
     <form action="#" name="ex_form" id="ex_form" method="POST">
         <h4>Is new user: {{ session['u_new'] }} Exercise type: <span id="temp_ex_type">{{ ex_type }}</span></h4>
+
         <input type="hidden" name="ex_type" id="ex_type" value="{{ ex_type }}">
         <input type="hidden" name="nr_1" value="{{ curr_exercise[0] }}">
         <input type="hidden" name="nr_2" value="{{ curr_exercise[1] }}">
+        <input type="hidden" name="ex_retry_nr" id="ex_retry_nr" value="{{ user['exercise'][ex_type]['opt_retry_nr'] }}">
+        
 
-
-        <div class="mdl-grid ui-cards">
-            <div class="mdl-cell exercise mdl-cell--2-col-phone">
+        <div class="mdl-grid ui-cards" style="overflow: hidden;">
+            <div class="mdl-cell exercise mdl-cell--2-col-phone" >
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
-                        <span class="title_span">{% if user['exercise'][ex_type]['opt_exercise_nr'] > 0 %}Exercise{% endif %}</span>
+                        <span class="title_span exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">Exercise</span>
                         <div class="mdl-card__menu" style="left: 16px; right:unset;">
                             <span class="mdl-chip mdl-chip--contact">
-                                <span class="mdl-chip__contact color--orange" id="unicorn_points">0</span>
+                                <span class="mdl-chip__contact color--orange" id="unicorn_points">{{ user['points'] }}</span>
                                 <span class="mdl-chip__text">Unicorn Points</span>
-                                <input type="hidden" name="unicorn_points" value="0">
+                                <input type="hidden" name="unicorn_points" value="{{ user['points'] }}">
                             </span>
                         </div>
-                        {% if user['exercise'][ex_type]['opt_exercise_nr'] > 0 %}
-                        <div class="mdl-card__menu">
+                        <!-- limited nr of exercises -->
+                       
+                        <div class="mdl-card__menu exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
                                 <span class="mdl-chip__text"> of &nbsp;</span>
@@ -37,7 +40,7 @@
                                     value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
                             </span>
                         </div>
-                        {% endif %}
+                       
                     </div>
                     <div class="mdl-card__supporting-text mdl-card--expand">
 
@@ -56,7 +59,7 @@
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <!-- ANSWER FIELD -->
                             <input class="mdl-textfield__input ex_2" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
-                                id="answer" name="answer" autofocus
+                                id="answer" autofocus name="answer" 
                                 {% if user['exercise'][ex_type]['opt_show_answer'] %}
                                 placeholder="{{ curr_exercise[2] }}" {% endif %} readonly>
                             <!-- END ASNSWER FIELD  -->
@@ -76,6 +79,7 @@
 
 
                     </div>
+                    <!-- submit button -->
                     {% if (user['exercise'][ex_type]['opt_auto_submit'] == False and user['exercise'][ex_type]['opt_answer_type'] > 1) %}
                     <div class="mdl-card__actions">
                         <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green "
@@ -86,10 +90,14 @@
                     {% endif %}
 
                 </div>
+                <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar" style="position: relative; bottom: 63px;">
+                    <div class="mdl-snackbar__text"></div>
+                    <button class="mdl-snackbar__action" type="button"></button>
+                </div>
             </div>
             <div class="mdl-cell exercise mdl-cell--2-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__title"> <span class="title_span">{% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}Retry{% endif %}</span>
+                    <div class="mdl-card__title"> <span class="title_span retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">Retry</span>
                         <!-- show hint -->
                         {% if user['exercise'][ex_type]['opt_show_hint'] %}
                         <div id="show_hint" class="hint-container">
@@ -117,18 +125,18 @@
                         {% endif %}
                         
 
-                        {% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}
+                       
                         <!-- retry  -->
-                        <div class="mdl-card__menu">
+                        <div class="mdl-card__menu retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">
                             <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
                                 <span class="mdl-chip__text"> of &nbsp;</span>
                                 <span class="mdl-chip__contact right color--orange"
                                     id="ex_total_retry">{{ user['exercise'][ex_type]['opt_retry_nr'] }}</span>
-                                <input type="hidden" name="ex_retry" value="0">
+                                
                             </span>
                         </div>
-                        {% endif %}
+                        
                     </div>
                     <div class="mdl-card__supporting-text mdl-card--expand">
 
@@ -166,7 +174,7 @@
                             {% for i in range(0, 5) %}
                             {% set x = curr_exercise[5][i] %}
                         <label
-                            class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect {% if user['exercise'][ex_type]['opt_answer_type'] <= i %} hidden  {% endif %} "
+                            class="mdl-switch big-label mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect {% if ((user['exercise'][ex_type]['opt_answer_type'] <= i) or (  x is not defined )) %} hidden  {% endif %} "
                             for="switchX{{ i }}">
                             <input type="checkbox" id="switchX{{ i }}" class="mdl-switch__input"
                                 name="switch{{ i }}" {% if loop.index == 12345 %} checked="" {% endif %}
@@ -190,12 +198,25 @@
         </div>
     </form>
 </div>
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <!-- NOT USED SO FAR !!!!!!! TODO check on it -->
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
+
+let is_ajax = false; //USE this to check if page load or ajax update exercise
+let current_retry = 1; //used for multiple tries
+
+function is_correct_answer(){
+
+    return  ($('#answer').val() == $('#correct_answer').val());
+}
+
     $('.mdl-layout__tab-manual-switch').click(function () {
         if (!$(this).hasClass('is-active')) {
             // console.log($(this).prop('id'));
@@ -204,19 +225,40 @@
         }
     })
 
+    function show_snack(correct) {
+        var snackbarContainer = document.querySelector('#demo-toast-example');
+        
+        if (correct) {
+            var data = { message: 'Well Done' };
+            snackbarContainer.style.background = '#00d45a';
+        } else {
+            var data = { message: 'Whoops' };
+            snackbarContainer.style.background = '#ff5252';
+        }
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+
     $(document).ready(function () {
+        
         $(".keypad").click(function () {
             let val = $(this).attr('data-nr');
             if ($.isNumeric(val)) {
                 let new_val = $('#answer').val() + val;
-                {% if user['exercise'][ex_type]['opt_retry_auto_submit'] %}
-                if ($('#correct_answer').val() == new_val) {
-                    console.log('correct');
-                    // set_unicorn_points();
+                $('#answer').val(new_val);
+                {% if user['exercise'][ex_type]['opt_auto_submit'] %}
+                    if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length ) {
+                    console.log('autosubmit_01');
                     submit_form();
+                } 
+                {% else %}
+                if (is_ajax) {
+                    if (user_options['opt_auto_submit']) {
+                    if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length ) {
+                    console.log('autosubmit_02_ajax');
+                    submit_form();
+                    }
                 }
                 {% endif %}
-                $('#answer').val(new_val);
             }
             else if (val == 'ok') {
                 submit_form();
@@ -272,11 +314,14 @@
     // gets new exercie values, answer, hint, checkbox values, user options for exercise type
     function get_new_exercise(ex_type) {
         // console.log(ex_type);
+        is_ajax = true;
 
         $.get( "{{ url_for('exercise_bp.get_exercise') }}", { ex_type: ex_type } )
         .done(function( data ) {
             let response = jQuery.parseJSON(data);
             let user_options = response[6];
+            current_retry = 1;
+
             console.log(user_options);
 
             // set nex exercise values and reset hint and retry 
@@ -290,10 +335,25 @@
             $('#answer').val('');
             $('#correct_answer').val(response[2]);
             $('#ex_type').val(ex_type);
+            $('#ex_retry_nr').val(user_options['opt_retry_nr']);
+            
+            $('#total_exercise').val(user_options['opt_exercise_nr']);
 
             $('#hint_content').html('<li class="mdl-list__item hint">Hint</li><li class="mdl-list__item  hint">'+response[4].join('</li><li class="mdl-list__item  hint">'));
+            
+            if (user_options['opt_retry_nr'] == 1) {
+            $('.retry_nr_div').addClass('hidden_content');
+            } else {
+                $('#ex_total_retry').html(user_options['opt_retry_nr']);
+                $('.retry_nr_div').removeClass('hidden_content');
+            }
 
-                      
+            if (user_options['opt_exercise_nr'] == 0) {
+            $('.exercise_nr_div').addClass('hidden_content');
+            } else {
+                $('#ex_total_nr').html(user_options['opt_exercise_nr']);
+                $('.exercise_nr_div').removeClass('hidden_content');
+            }          
 
             // show answer if option
            if (user_options['opt_show_answer'])  $('.ex_2').attr("placeholder", response[2]);
@@ -311,15 +371,15 @@
                         the_switch.trigger('click');
                     }
                 }
-            if (user_options['opt_answer_type'] == 3) {
-                $('label[for="switchX3"]').addClass('hidden');
-                $('label[for="switchX4"]').addClass('hidden');
-            }
-            else if (user_options['opt_answer_type'] == 5) {
-                $('label[for="switchX3"]').removeClass('hidden');
-                $('label[for="switchX4"]').removeClass('hidden');
-            }
 
+                for (i = 0; i<5; i++){
+                    if (i >= options.length) {
+                        $('label[for="switchX'+i+'"]').addClass('hidden');
+                    } else {
+                        $('label[for="switchX'+i+'"]').removeClass('hidden');                 
+                    }
+                }
+              
             $('#show_keypad').hide();
             $('#show_check_options').show();    
             } else {
@@ -330,7 +390,13 @@
         });
     } //end get_new_exercise
 
+function save_points() {
 
+    $.get("{{ url_for('exercise_bp.add_point') }}", { 'user_id' : "{{ user['_id'] }}" })
+            .done(function (data) {
+                console.log("Response Was: " + data);
+            });
+}
 
     function submit_answer() {
 
@@ -345,19 +411,45 @@
     }
 
     function submit_form() {
+        console.log('submit_form_called with answer ' + $("#answer").val());
         if ($.isNumeric($("#answer").val())) {
-            if (($("#answer").val() == $("#correct_answer").val()) || (parseInt($('#ex_retry').html()) >= parseInt($('#ex_total_retry').html()))) {
-                set_chip('unicorn_points');
+            console.log('is numeric');
+            let ex_type_val = $('#ex_type').val();
+           
+            //ex_retry_nr
+            
+            console.log('Nr of retries: '  + $('#ex_retry_nr').val()) ;
+
+            // if ($('#ex_retry_nr').val() >= parseInt($('#ex_total_retry').html())) {
+
+            if (is_correct_answer()) {
+                set_chip('unicorn_points'); 
+                save_points();
                 set_chip('ex_curr_nr');
                 submit_answer();
-                ex_type = $('#ex_type').val();
-                get_new_exercise(ex_type);
+                get_new_exercise(ex_type_val);
+                show_snack(true);
                 $("#answer").focus();
-                // console.log('PARSE INT ' + parseInt($('#ex_retry').html()) + ' >= ' + parseInt($('#ex_total_retry').html()));
-            } else {
-                // console.log('PARSE INT ' + parseInt($('#ex_retry').html()));
+                console.log('COrrect Answer ex_type ' + ex_type_val  );
+
+            } else { // NOT CORRECT
+                // opt_retry_nr
+                {% if user['exercise'][ex_type]['opt_retry_nr'] > 1 %}
+                 console.log('ex_type ' + ex_type_val + 'PARSE INT ' + parseInt($('#ex_retry').html()));
                 set_chip('ex_retry');
+                {% else %}
+                console.log('ex_type ' + ex_type_val + ' ELSE to execute' + ' is_ajax: ' + is_ajax);
+                if (is_ajax)  {
+                    console.log('user_options_exist');
+                }
+                else {
+                    console.log('not ajax ');
+                }
+
+                {% endif %}
             }
+
+
         } else {
 
             //HACK for not triggering keyboard on tablet
