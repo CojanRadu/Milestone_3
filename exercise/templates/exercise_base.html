@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/nv.d3.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/application.min.css')}}">
 
+    <link href="https://fonts.googleapis.com/css2?family=Crafty+Girls&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" type="text/css" />
+
 </head>
 
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-        <header class="mdl-layout__header">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs primary-0">
+        <header class="mdl-layout__header ">
             <!-- Tabs -->
-            <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-js-tabs">
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-js-tabs primary-3">
                 {% if (user.exercise.add.opt_enabled) %}
                 {% set first_option = 'add' %}
                 <a href="#fixed-tab-1"
@@ -59,7 +62,7 @@
                 {% else %}
                 <a class="mdl-layout__tab_disable">Divide</a>
                 {% endif %}
-                <a class="mdl-layout__tab_disable" href="{{url_for('login_bp.do_logout')}}">Log Out</a>
+                <a class="mdl-layout__tab_disable logout" href="{{url_for('login_bp.do_logout')}}">Log Out</a>
             </div>
         </header>
         <main class="mdl-layout__content">
