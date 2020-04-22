@@ -9,11 +9,6 @@
    min-height: 302px;
 }
 
-#answer {
-    font-size: 50px;
-    text-align: center;
-}
-
 .logout {
     color: rgba(255, 255, 255, .7);
 }
@@ -45,8 +40,9 @@ justify-content: center;
     padding: 20px;
 }
 
-.undo {
-    top: -4px;
+.mdl-chip__contact {
+    font-family: 'Rock Salt', cursive;
+    font-size: 12px;
 }
 
 .badge-slider {
@@ -98,8 +94,12 @@ h2.hand-letter {
 }
 
 #answer {
+    font-size: 50px;
+    text-align: center;
     line-height: 119px;
-    padding-left: 10px;
+    margin-top: 36px;
+    line-height: 86px;
+    padding-bottom: 0px;
 }
 
 .mdl-switch.big-label {
@@ -132,16 +132,18 @@ h2.hand-letter {
 }
 
 .mdl-chip__contact.right {
-    margin-right: -12px;
+    margin-right: -25px;
 }
 
+#hint_link {
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 12px;
+}
 .title_span {
-    margin-left: auto;
-    margin-right: auto;
     font-size: 18px;
     padding-left: 50px;
-    margin-bottom: 6px;
-    margin-top: -6px;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .mdl-layout__header {
@@ -166,12 +168,11 @@ h2.hand-letter {
     line-height: 48px;
     width: auto;
 }
-
-.hint-container {
-    left: 0px;
-    top: 0px;
-    position: absolute;
-    height: 50px;
+.mdl-chip {
+    display: inline-flex;
+    padding-left: 0;
+    background-color: #1E8B9A;
+    margin: 0;
 }
 
 .hidden_content {
@@ -195,7 +196,6 @@ h2.hand-letter {
     min-width: 64px;
     width: 100%;
     border-radius: 2px;
-    text-transform: uppercase;
 }
 
 .button--colored-light-blue {
@@ -306,8 +306,18 @@ h2.hand-letter {
     background-color: #83E228;
 }
 
+.mdl-switch__thumb {
+    background-color: #1E8B9A;
+}
+.mdl-switch__track{
+    background-color: #83E228
+}
 .bp_grid {
     background-image: linear-gradient(rgba(255, 255, 255, .2) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, .2) 2px, transparent 2px), linear-gradient(rgba(255, 255, 255, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .1) 1px, transparent 1px);
     background-size: 75px 75px, 75px 75px, 15px 15px, 15px 15px;
 
+}
+
+.mdl-mini-footer {
+    padding: 10px 20px;
 }

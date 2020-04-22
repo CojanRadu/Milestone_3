@@ -97,7 +97,8 @@
                                 <span class="mdl-switch__label" >
                                     <span class="big-label hand-letter" id="checkbox_answer{{ i }}">{{ x }}</span>
                                 </span>
-                                <div class="mdl-switch__track complement-0"></div>
+                                
+                               
                             </label>
                             {% endfor %}
                         </div>
@@ -106,77 +107,64 @@
             </div>
         </div>
 
-        <footer class="mdl-mini-footer">
+        <footer class="mdl-mini-footer primary-3">
             <div class="mdl-mini-footer__left-section">
                 <!-- Unicorn Points  -->
-                <span
-                    class="title_span exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">Exercise</span>
-                <div class="mdl-card__menu" style="left: 16px; right:unset;">
                     <span class="mdl-chip mdl-chip--contact">
                         <span class="mdl-chip__contact color--orange" id="unicorn_points">{{ user['points'] }}</span>
                         <span class="mdl-chip__text">Unicorn Points</span>
                         <input type="hidden" name="unicorn_points" value="{{ user['points'] }}">
                     </span>
-                </div>
                  <!-- limited nr of exercises -->
-
-                 <div
-                 class="mdl-card__menu exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">
-                 <span class="mdl-chip mdl-chip--contact">
-                     <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
-                     <span class="mdl-chip__text"> of &nbsp;</span>
-                     <span class="mdl-chip__contact right color--orange"
-                         id="ex_total_nr">{{ user['exercise'][ex_type]['opt_exercise_nr'] }}</span>
-                     <input type="hidden" name="ex_curr_nr" value="0">
-                     <input type="hidden" name="total_exercise" id="total_exercise"
-                         value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
-                 </span>
-             </div>
-
-
-
+                <span class="title_span exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">Exercise</span>
+                 <div class="mdl-chip exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">
+                    <span class="mdl-chip mdl-chip--contact">
+                        <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
+                        <span class="mdl-chip__text"> of &nbsp;</span>
+                        <span class="mdl-chip__contact right color--orange"
+                            id="ex_total_nr">{{ user['exercise'][ex_type]['opt_exercise_nr'] }}</span>
+                        <input type="hidden" name="ex_curr_nr" value="0">
+                        <input type="hidden" name="total_exercise" id="total_exercise"
+                            value="{{ user['exercise'][ex_type]['opt_exercise_nr'] }}">
+                    </span>
+                </div>
             </div>
+
             <div class="mdl-mini-footer__right-section">
-                <span class="title_span retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">Retry</span>
                 <!-- show hint -->
-                {% if user['exercise'][ex_type]['opt_show_hint'] %}
-                <div id="show_hint" class="hint-container">
-
-                    <a style="cursor: pointer; font-weight: 400;" id="hint_link">
-                        <div class="mdl-card__menu" style="left: 16px; right:unset;">
-                            <span class="mdl-chip mdl-chip--contact">
-                                <span class="mdl-chip__contact color--orange" id="hint_nr">0</span>
-                                <span class="mdl-chip__text">Hint</span>
-                                <input type="hidden" name="hint_nr" value="0">
-                            </span>
-                        </div>
-
-                    </a>
-
-                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown "
-                        for="show_hint" id="hint_content">
+                <div id="show_hint"
+                    class="mdl-chip hint-container {% if user['exercise'][ex_type]['opt_show_hint'] == false %} hidden_content {% endif %}">
+                    <a id="hint_link">
+                        <span class="mdl-chip mdl-chip--contact">
+                            <span class="mdl-chip__contact color--orange" id="hint_nr">0</span>
+                            <span class="mdl-chip__text">Hint</span>
+                            <input type="hidden" name="hint_nr" value="0">
+                        </span>
+                    
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp "
+                        for="show_hint" id="hint_content" style="margin-bottom: 200px;">
                         <li class="mdl-list__item hint">Hint</li>
                         {% for n in curr_exercise[4] %}
                         <li class="mdl-list__item  hint">{{ n }}</li>
                         {% endfor %}
-                    </ul>
+                    </ul></a>
                 </div>
-                {% endif %}
+            
+               
 
-                 <!-- retry  -->
-                 <div
-                 class="mdl-card__menu retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">
-                 <span class="mdl-chip mdl-chip--contact">
-                     <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
-                     <span class="mdl-chip__text"> of &nbsp;</span>
-                     <span class="mdl-chip__contact right color--orange"
-                         id="ex_total_retry">{{ user['exercise'][ex_type]['opt_retry_nr'] }}</span>
-                 </span>
-             </div>
-
-                
-
-            </div>
+                <!-- retry  -->
+                <span
+                    class="title_span retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">Retry</span>
+                <div class="mdl-chip retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">
+                    <span class="mdl-chip mdl-chip--contact">
+                        <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
+                        <span class="mdl-chip__text"> of &nbsp;</span>
+                        <span class="mdl-chip__contact right color--orange"
+                            id="ex_total_retry">{{ user['exercise'][ex_type]['opt_retry_nr'] }}</span>
+                    </span>
+                </div>
+</div>
+         
           </footer>
     </form>
 </div>
