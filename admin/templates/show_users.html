@@ -60,12 +60,7 @@
                                 <span class="label label--mini label__availability background-color--primary"></span>
                                 <span class="label label--mini label__availability background-color--primary"></span>
                             </td>
-
-
-                            <td class="mdl-data-table__cell--non-numeric">
-
-                               
-                            </td>
+                            <td class="mdl-data-table__cell--non-numeric"></td>
                         </tr>
                         
                         <tr>
@@ -94,12 +89,9 @@
                                             id="{{ user._id }}">
                                             Delete <i class="material-icons"
                                                 style="margin-left: 15px; margin-right: 0;">forward</i></a>
-
                                     </li>
                                 </ul>
                                 {% endif %}
-
-
                             </td>
                             <td class="mdl-data-table__cell" >Substract</td>
                             <td class="mdl-data-table__cell--non-numeric">
@@ -117,7 +109,6 @@
                                 <span class="label label--mini color--dark-gray">{{ mult }}</span>
                                 {% endif %}
                                 {% endfor %}
-
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">Ok</td>
                             <td class="mdl-data-table__cell--non-numeric"> 
@@ -127,9 +118,6 @@
                             </td>
                             <td class="mdl-data-table__cell--non-numeric"></td>
                         </tr>
-
-
-                       
                         <tr id="remove2{{ user._id }}">
                             <td class="mdl-data-table__cell" colspan="5"></td>
                             <td class="mdl-data-table__cell" >Multiply</td>
@@ -148,7 +136,6 @@
                                 <span class="label label--mini color--dark-gray">{{ mult }}</span>
                                 {% endif %}
                                 {% endfor %}
-
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">Ok</td>
                             <td class="mdl-data-table__cell--non-numeric"> 
@@ -157,7 +144,6 @@
                             </td>
                             <td class="mdl-data-table__cell--non-numeric"></td>
                         </tr>
-                       
                         <tr id="remove3{{ user._id }}">
                             <td class="mdl-data-table__cell" colspan="5"></td>
                             <td class="mdl-data-table__cell" >Divide</td>
@@ -176,7 +162,6 @@
                                 <span class="label label--mini color--dark-gray">{{ mult }}</span>
                                 {% endif %}
                                 {% endfor %}
-
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">Ok</td>
                             <td class="mdl-data-table__cell--non-numeric"> 
@@ -192,24 +177,13 @@
             </div>
         </div>
     </div>
-
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         $('.left_menu_link').toggleClass('mdl-navigation__link--current');
-        $('.show-modal').click(function (el) {
-            // console.log(el);
-            // $(this).prop('id', 'more2'); 
-            // $('#changeme').attr('for', $(this).attr('id'));
-            // console.log($(this).attr('id'));
-            // $('#more2_changed').trigger('click');
-        })
-
+        
         $('.del-user').click(function() {
-            // console.log($(this).attr('id'));
-            
-       
             $(this).closest("tr")
                 .children('td, th')
                 .animate({ margin: 0, padding: '12px 0px' })
@@ -226,14 +200,10 @@
                 .slideUp(function () {  $('#remove'+i+$(this).attr('id'));
             });
             $('#remove'+i+$(this).attr('id')).remove();
-           
         }
-
-
-        
-        $.post("{{ url_for('admin_bp.delete_user') }}", { user_id: $(this).attr('id') })
+           $.post("{{ url_for('admin_bp.delete_user') }}", { user_id: $(this).attr('id') })
             .done(function (data) {
-                 console.log("Delete Response Was: " + data);
+                //  console.log("Delete Response Was: " + data);
             });
         })
 })

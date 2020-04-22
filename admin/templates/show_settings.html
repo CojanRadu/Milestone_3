@@ -174,29 +174,20 @@
                                         data-badge="{{ user.exercise[one_ex].opt_exercise_nr }}"></span>
                                     <span class="mdl-tooltip mdl-tooltip--large" for="{{ one_ex }}-slider-tool"
                                         id="{{ one_ex }}-tooltip">{{ user.exercise[one_ex].opt_exercise_nr }}</span>
-
                                 </td>
-
                             </tr>
-
-
                         </tbody>
-
                     </table>
-
                     <table class="mdl-data-table mdl-js-data-table">
                         <tbody>
                             <tr>
-
                                 {% for nr in user.exercise[one_ex].opt_nr %}
                                 <td class="mdl-data-table__cell--non-numeric"><strong>{{ nr }}</strong></td>
                                 {% endfor %}
                             </tr>
                             <tr>
-
                                 {% for nr in user.exercise[one_ex].opt_nr %}
                                 <td class="mdl-data-table__cell--non-numeric">
-
                                     <label
                                         class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-green mdl-js-ripple-effect"
                                         for="{{ one_ex }}-switch-{{ nr }}">
@@ -208,7 +199,6 @@
                                         <div class="mdl-switch__thumb">
                                             <span class="mdl-switch__focus-helper"></span>
                                         </div>
-
                                     </label>
                                 </td>
                                 {% endfor %}
@@ -220,7 +210,6 @@
                                         id="{{ one_ex }}-update-btn" name="{{ one_ex }}-update-btn">
                                         <i class="material-icons">create</i>
                                         Save Settings - {{ one_ex }}
-
                                     </button>
                                 </td>
                             </tr>
@@ -230,7 +219,6 @@
             </div>
         </div>
     </div>
-
 </div>
 {% endfor %}
 <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
@@ -241,31 +229,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
     ex = ['add', 'substract', 'multiply', 'divide'];
-   
-    
-        
-  
-    
-
-
     (function () {
         'use strict';
         window['counter'] = 0;
-
         var snackbarContainer = document.querySelector('#demo-toast-example');
-
         ex.forEach(function(item) {
-        // console.log(item);
-
         const slider = document.querySelector('#'+item+'-slider-tool');
         slider.addEventListener("input", function () {
         document.getElementById(item+"-tooltip").textContent = slider.value;
         document.getElementById(item+"-badge1").setAttribute('data-badge', slider.value);
-
          }, false);
-
-
-        
+      
         var showToastButton = document.querySelector('#'+item+'-update-btn');
         showToastButton.addEventListener('click', function (event) {
             'use strict';
@@ -274,13 +248,11 @@
 
             var str = $("#"+item+"-update-form").serialize();
             event.preventDefault();
-            console.log(str);
             $.post("{{ url_for('admin_bp.update_settings') }}", { str })
                 .done(function (data) {
-                    console.log("Response Was: " + data);
+                    // console.log("Response Was: " + data);
                 });
         });
-
     });
     }());
 

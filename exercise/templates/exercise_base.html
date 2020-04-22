@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathIsFun</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900" rel="stylesheet"
-        type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,300,100,700,900" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- inject:css -->
+
     <link rel="stylesheet" href="{{url_for('static', filename='css/getmdl-select.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/nv.d3.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/application.min.css')}}">
@@ -18,77 +17,64 @@
 </head>
 
 <body>
-
-
-
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-            mdl-layout--fixed-tabs">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
         <header class="mdl-layout__header">
-
             <!-- Tabs -->
             <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-js-tabs">
                 {% if (user.exercise.add.opt_enabled) %}
-                    {% set first_option = 'add' %}
-                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if (user.exercise.add.opt_enabled) %} is-active {% endif %} mdl-layout__tab-manual-switch" id="add">Add</a>
-                    {% else %}
-                    <a class="mdl-layout__tab_disable">Add</a>
-                    {% endif %}
+                {% set first_option = 'add' %}
+                <a href="#fixed-tab-1"
+                    class="mdl-layout__tab {% if (user.exercise.add.opt_enabled) %} is-active {% endif %} mdl-layout__tab-manual-switch"
+                    id="add">Add</a>
+                {% else %}
+                <a class="mdl-layout__tab_disable">Add</a>
+                {% endif %}
                 {% if (user.exercise.substract.opt_enabled) %}
-                        
-                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="substract">Substract</a>
-                    {% if first_option is not defined %}
-                    {% set first_option = 'substract' %}
-                    {%endif%}
-                    {% else %}
-                    <a class="mdl-layout__tab_disable">Substract</a>
+                <a href="#fixed-tab-1"
+                    class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch"
+                    id="substract">Substract</a>
+                {% if first_option is not defined %}
+                {% set first_option = 'substract' %}
+                {%endif%}
+                {% else %}
+                <a class="mdl-layout__tab_disable">Substract</a>
                 {% endif %}
                 {% if (user.exercise.multiply.opt_enabled) %}
-                   
-                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="multiply">Multiply</a>
-                    {% if first_option is not defined %}
-                    {% set first_option = 'multiply' %}
-                    {% endif %}
-                    {% else %}
-                    <a class="mdl-layout__tab_disable">Multiply</a>
+                <a href="#fixed-tab-1"
+                    class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch"
+                    id="multiply">Multiply</a>
+                {% if first_option is not defined %}
+                {% set first_option = 'multiply' %}
+                {% endif %}
+                {% else %}
+                <a class="mdl-layout__tab_disable">Multiply</a>
                 {% endif %}
                 {% if (user.exercise.divide.opt_enabled) %}
-                   
-                    <a href="#fixed-tab-1" class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch" id="divide">Divide</a>
-                    {% if first_option is not defined %}
-                    {% set first_option = 'divide' %}
-                    {% endif %}
-                    {% else %}
-                    <a class="mdl-layout__tab_disable">Divide</a>
+                <a href="#fixed-tab-1"
+                    class="mdl-layout__tab {% if first_option is not defined %}is-active{% endif %} mdl-layout__tab-manual-switch"
+                    id="divide">Divide</a>
+                {% if first_option is not defined %}
+                {% set first_option = 'divide' %}
+                {% endif %}
+                {% else %}
+                <a class="mdl-layout__tab_disable">Divide</a>
                 {% endif %}
                 <a class="mdl-layout__tab_disable" href="{{url_for('login_bp.do_logout')}}">Log Out</a>
             </div>
         </header>
-
         <main class="mdl-layout__content">
             <section class="mdl-layout__tab-panel is-active" id="fixed-tab-1">
                 <div class="page-content">
-
                     {% block content %} {% endblock %}
                 </div>
             </section>
-            
         </main>
     </div>
-
-
-
-
     <script src="{{url_for('static', filename='js/d3.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/getmdl-select.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/material.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/nv.d3.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/layout/layout.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/scroll/scroll.min.js')}}"></script>
-
-    <script>
-
-
-    </script>
 </body>
-
 </html>

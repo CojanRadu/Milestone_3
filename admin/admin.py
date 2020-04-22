@@ -13,11 +13,6 @@ admin_bp = Blueprint('admin_bp', __name__,
 
 ex_types = list(('add', 'substract', 'multiply', 'divide'))  
 
-# @admin_bp.route('/')
-# def admin_home():
-#     user = 'aa'
-#     return render_template('admin/show_settings.html', user=user)
-
 @admin_bp.route('/search_user', methods=['POST'])
 def search_user():
     search_str = str(request.form['search_user'])
@@ -35,7 +30,6 @@ def show_users():
 @admin_bp.route('/show_settings')
 def show_settings():
     admin_user = mongo.db.users.find_one({"name": "admin"})
-    # print(type(admin_user))
     return render_template('show_settings.html', user=admin_user, ex=ex_types)    
 
 @admin_bp.route('/edit_user_settings/<user_id>')
@@ -53,8 +47,6 @@ def delete_user():
 @admin_bp.route('/update_settings', methods=['POST'])
 def update_settings():
 
-    # admin_user = mongo.db.users.find_one({"name": "admin"})
-    # print(str(request.form))
     my_dict = urllib.parse.parse_qs(request.form['str'])
 
     # """ form doesn't send any values, add manually """
@@ -73,8 +65,6 @@ def update_settings():
     for i in range(13):
         my_dict.setdefault('switch_'+str(i), '[off]')
         user['exercise'][ex_type]['opt_nr'][str(i)] = True if str(my_dict['switch_'+str(i)]) == "['on']" else False
-
-    # user['exercise'][ex_type]['opt_nr']['1'] = True
 
     user['opt_enabled'] = True if str(my_dict['enabled']) == "['on']" else False
     user['opt_can_be_inverted'] = True if str(my_dict['inverted']) == "['on']" else False
@@ -120,5 +110,5 @@ def update_settings():
 
     mongo.db.users.update_one(myquery, new_values)
 
-    return str(new_values)  
-    # return str(user) 
+    #return str(new_values)  
+    return('Update OK')

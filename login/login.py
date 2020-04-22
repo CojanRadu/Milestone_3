@@ -1,8 +1,8 @@
-# import os
 from flask import Blueprint, render_template, redirect, session, url_for, request
 from datetime import datetime, date
 from bson.objectid import ObjectId
 from database import mongo
+import uuid
 
 """ TODO move back some functionality like datetime """ 
 
@@ -59,5 +59,6 @@ def do_login():
             insert_id = user['_id']
 
         session["u_id"] = str(insert_id)
+        session["s_id"] = uuid.uuid4() 
         return redirect(url_for('exercise_bp.exercise', username=username))
    

@@ -13,25 +13,20 @@
                         <i class="material-icons">developer_board</i>
                         Manage Users
                     </a>
-
                     <div class="sub-navigation">
-                        <a class="mdl-navigation__link">
+                        <a class="mdl-navigation__link" style="color: #757575; border-left:none; background-color:transparent">
                             <i class="material-icons">pages</i>
                             Login As {{ admin }}
                             <i class="material-icons">keyboard_arrow_down</i>
                         </a>
                         <div class="mdl-navigation">
                             {% for x in user_names %}
-                            
-                            
-                            <a class="mdl-navigation__link" href="{{ url_for('login_bp.login_as_admin', user_id=x._id, user_name=x.name) }}">
+                           <a class="mdl-navigation__link" href="{{ url_for('login_bp.login_as_admin', user_id=x._id, user_name=x.name) }}">
                                 {{ x.name }} 
                             </a>
                             {% endfor %}
                         </div>
                     </div>
-
-
                     <div class="mdl-layout-spacer"></div>
                     <hr>
                     <a class="mdl-navigation__link" href="{{ url_for('login_bp.show_login') }}">

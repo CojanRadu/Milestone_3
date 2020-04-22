@@ -1,0 +1,57 @@
+{% extends 'exercise_base.html'%}
+
+{% block content %}
+{% set cnt = namespace(value=0) %}
+
+<div class="mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h1 class="mdl-card__title-text">Simple Stat</h1>
+    </div>
+    <div class="mdl-card__supporting-text no-padding">
+        <table class="mdl-data-table mdl-js-data-table" data-upgraded=",MaterialDataTable">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">#</th>
+                    <th class="mdl-data-table__cell">Nr 1</th>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell">Nr 2</th>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell">Answer</th>
+                    <th class="mdl-data-table__cell">Correct</th>
+                    <th class="mdl-data-table__cell--non-numeric">Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for one_stat in stat %}
+                {% set cnt.value = cnt.value + 1  %} 
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric" style="min-width: 150px;">{{ cnt.value }}</td>
+                    <td class="mdl-data-table__cell">{{ one_stat['nr_1'] }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if one_stat['type'] == 'add' %} + {% endif %}
+                        {% if one_stat['type'] == 'substract' %} - {% endif %}
+                        {% if one_stat['type'] == 'multiply' %} * {% endif %}
+                        {% if one_stat['type'] == 'divide' %} / {% endif %}
+
+                    </td>
+                    <td class="mdl-data-table__cell">{{ one_stat['nr_2'] }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">=</td>
+                    <td class="mdl-data-table__cell">{{ one_stat['answer'] }}</td>
+                    <td class="mdl-data-table__cell">({{ one_stat['correct'] }})</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {% if one_stat['is_correct'] %}
+                        <span class="label label--mini background-color--primary">Correct</span>
+                        {% else %}
+                        <span class="label label--mini background-color--secondary">Wrong</span>
+                        {% endif %}
+                    </td>
+                </tr>
+               
+               {% endfor %} 
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
