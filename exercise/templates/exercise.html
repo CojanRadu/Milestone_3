@@ -5,7 +5,10 @@
 {% set ex_type = first_option %}
 {% set curr_exercise = make_exercise(ex_type, user) %}
 
+
 <div class="mdl-layout mdl-js-layout is-small-screen  primary-2">
+    
+
     <form action="#" name="ex_form" id="ex_form" method="POST">
         
         <input type="hidden" name="ex_type" id="ex_type" value="{{ ex_type }}">
@@ -15,6 +18,7 @@
             value="{{ user['exercise'][ex_type]['opt_retry_nr'] }}">
 
         <div class="mdl-grid ui-cards" style="overflow: hidden;">
+            
             <div class="mdl-cell exercise mdl-cell">
                 <div class="mdl-card mdl-shadow--2dp secondary-1-0 bp_grid">
                    
@@ -89,7 +93,7 @@
                             {% for i in range(0, 5) %}
                             {% set x = curr_exercise[5][i] %}
                             <label
-                                class="mdl-switch big-label hand-letter mdl-js-switch mdl-js-ripple-effect switch--colored-orange mdl-js-ripple-effect {% if ((user['exercise'][ex_type]['opt_answer_type'] <= i) or (  x is not defined )) %} hidden  {% endif %} "
+                                class="mdl-switch big-label hand-letter mdl-js-switch mdl-js-ripple-effect switch--colored-red mdl-js-ripple-effect {% if ((user['exercise'][ex_type]['opt_answer_type'] <= i) or (  x is not defined )) %} hidden  {% endif %} "
                                 for="switchX{{ i }}" style="margin-left: 6px;">
                                 <input type="checkbox" id="switchX{{ i }}" class="mdl-switch__input"
                                     name="switch{{ i }}" {% if loop.index == 12345 %} checked="" {% endif %}
@@ -108,7 +112,7 @@
         </div>
 
         <footer class="mdl-mini-footer primary-3">
-            <div class="mdl-mini-footer__left-section">
+             <div class="mdl-mini-footer__left-section">
                 <!-- Unicorn Points  -->
                     <span class="mdl-chip mdl-chip--contact">
                         <span class="mdl-chip__contact color--orange" id="unicorn_points">{{ user['points'] }}</span>
@@ -117,7 +121,7 @@
                     </span>
                  <!-- limited nr of exercises -->
                 <span class="title_span exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">Exercise</span>
-                 <div class="mdl-chip exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}">
+                 <div class="mdl-chip exercise_nr_div {% if user['exercise'][ex_type]['opt_exercise_nr'] == 0 %} hidden_content {% endif %}" style="float: right;">
                     <span class="mdl-chip mdl-chip--contact">
                         <span class="mdl-chip__contact color--orange" id="ex_curr_nr">1</span>
                         <span class="mdl-chip__text"> of &nbsp;</span>
@@ -132,30 +136,25 @@
 
             <div class="mdl-mini-footer__right-section">
                 <!-- show hint -->
-                <div id="show_hint"
-                    class="mdl-chip hint-container {% if user['exercise'][ex_type]['opt_show_hint'] == false %} hidden_content {% endif %}">
+                <div id="show_hint" class="mdl-chip {% if user['exercise'][ex_type]['opt_show_hint'] == false %} hidden_content {% endif %}" >
                     <a id="hint_link">
                         <span class="mdl-chip mdl-chip--contact">
                             <span class="mdl-chip__contact color--orange" id="hint_nr">0</span>
                             <span class="mdl-chip__text">Hint</span>
                             <input type="hidden" name="hint_nr" value="0">
                         </span>
-                    
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp "
-                        for="show_hint" id="hint_content" style="margin-bottom: 200px;">
+                    </a>
+                    <ul class="mdl-menu mdl-menu--top-left mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
+                        for="hint_link" id="hint_content" >
                         <li class="mdl-list__item hint">Hint</li>
                         {% for n in curr_exercise[4] %}
                         <li class="mdl-list__item  hint">{{ n }}</li>
                         {% endfor %}
-                    </ul></a>
+                    </ul>
                 </div>
-            
-               
-
                 <!-- retry  -->
-                <span
-                    class="title_span retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">Retry</span>
-                <div class="mdl-chip retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}">
+                
+                <div class="mdl-chip retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}" style="float: right;">
                     <span class="mdl-chip mdl-chip--contact">
                         <span class="mdl-chip__contact color--orange" id="ex_retry">1</span>
                         <span class="mdl-chip__text"> of &nbsp;</span>
@@ -163,12 +162,17 @@
                             id="ex_total_retry">{{ user['exercise'][ex_type]['opt_retry_nr'] }}</span>
                     </span>
                 </div>
-</div>
+                <span
+                    class="retry_span retry_nr_div {% if user['exercise'][ex_type]['opt_retry_nr'] == 1 %} hidden_content {% endif %}" >Retry</span>
+            </div>
          
           </footer>
     </form>
-</div>
+    
+    
 
+</div>
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <!-- NOT USED SO FAR !!!!!!! TODO check on it -->
@@ -188,6 +192,46 @@
     current_ex_nr['multiply'] = 1;
     current_ex_nr['divide'] = 1;
 
+
+    
+
+    $(document).ready(function () {
+        $(".keypad").click(function () {
+            event.preventDefault();
+            let val = $(this).attr('data-nr');
+            if ($.isNumeric(val)) {
+                let new_val = $('#answer').val() + val;
+                $('#answer').val(new_val);
+                if (!is_ajax) {
+                    {% if user['exercise'][ex_type]['opt_auto_submit'] %}
+                    if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length) {
+                        submit_form();
+                    }
+                    {% endif %}
+                } else { // ajax reload
+                    if (user_options['opt_auto_submit']) {
+                            if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length) {
+                                submit_form();
+                            }
+                        }
+                }
+            }
+            else if (val == 'ok') {
+                submit_form();
+            }
+            else {
+                var str = $('#answer').val();
+                var res = str.substring(0, str.length - 1);
+                $('#answer').val(res);
+            }
+            $("#answer").focus();
+        })
+
+        $('#hint_link').click(function () {
+            set_chip('hint_nr');
+        })
+    });
+    //END document ready
 
     function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
@@ -229,43 +273,7 @@
         snackbarContainer.MaterialSnackbar.showSnackbar(data);
     }
 
-    $(document).ready(function () {
-        $(".keypad").click(function () {
-            event.preventDefault();
-            let val = $(this).attr('data-nr');
-            if ($.isNumeric(val)) {
-                let new_val = $('#answer').val() + val;
-                $('#answer').val(new_val);
-                if (!is_ajax) {
-                    {% if user['exercise'][ex_type]['opt_auto_submit'] %}
-                    if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length) {
-                        submit_form();
-                    }
-                    {% endif %}
-                } else { // ajax reload
-                    if (user_options['opt_auto_submit']) {
-                            if (is_correct_answer() || ($('#correct_answer').val().length) == (new_val).length) {
-                                submit_form();
-                            }
-                        }
-                }
-            }
-            else if (val == 'ok') {
-                submit_form();
-            }
-            else {
-                var str = $('#answer').val();
-                var res = str.substring(0, str.length - 1);
-                $('#answer').val(res);
-            }
-            $("#answer").focus();
-        })
 
-        $('#hint_link').click(function () {
-            set_chip('hint_nr');
-        })
-    });
-    //END document ready
 
     function set_chip(chip_name) {
             let chip_val;
