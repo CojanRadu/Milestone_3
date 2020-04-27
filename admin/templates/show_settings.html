@@ -12,7 +12,6 @@
         <div class="mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">{{ capitalize(one_ex) }} Settings - <strong>&nbsp;{{ user.name }} </strong></h1>
-
             </div>
             <div class="mdl-card__supporting-text no-padding">
                 <form method="POST" action="{{ url_for('admin_bp.update_settings') }}" name="{{ one_ex }}-update-form"
@@ -20,7 +19,6 @@
                     <table class="mdl-data-table mdl-js-data-table">
                         <thead>
                             <tr>
-
                                 <th class="mdl-data-table__cell--non-numeric">
                                     <input type="hidden" value="{{ user._id }}" name="user_id" id="{{ one_ex }}-user-id">
                                     <input type="hidden" value="{{ user.name }}" name="user_name" id="{{ one_ex }}-user-name">
@@ -47,7 +45,6 @@
                                         <div class="mdl-switch__track"></div>
                                         <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
                                     </label>
-
                                 </td>
                                 <td class="mdl-data-table__cell--non-numeric">
                                     <label
@@ -71,7 +68,6 @@
                                         <div class="mdl-switch__track"></div>
                                         <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
                                         </div>
-
                                     </label>
                                 </td>
                                 <td class="mdl-data-table__cell--non-numeric">
@@ -149,9 +145,7 @@
                                         <div class="mdl-switch__track"></div>
                                         <div class="mdl-switch__thumb"><span class="mdl-switch__focus-helper"></span>
                                     </label>
-
                                 </td>
-
                                 <td class="mdl-data-table__cell--non-numeric">
                                     <label
                                         class="mdl-switch mdl-js-switch mdl-js-ripple-effect switch--colored-red mdl-js-ripple-effect"
@@ -163,8 +157,6 @@
                                             <span class="mdl-switch__focus-helper"></span>
                                     </label>
                                 </td>
-
-
                                 <td class="mdl-data-table__cell--non-numeric">
                                     <p style="width: 150px; margin-bottom: -5px;">
                                         <input class="mdl-slider mdl-js-slider slider--colored-orange" type="range"
@@ -225,41 +217,8 @@
     <div class="mdl-snackbar__text"></div>
     <button class="mdl-snackbar__action" type="button"></button>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    ex = ['add', 'substract', 'multiply', 'divide'];
-    (function () {
-        'use strict';
-        window['counter'] = 0;
-        var snackbarContainer = document.querySelector('#demo-toast-example');
-        ex.forEach(function(item) {
-        const slider = document.querySelector('#'+item+'-slider-tool');
-        slider.addEventListener("input", function () {
-        document.getElementById(item+"-tooltip").textContent = slider.value;
-        document.getElementById(item+"-badge1").setAttribute('data-badge', slider.value);
-         }, false);
-      
-        var showToastButton = document.querySelector('#'+item+'-update-btn');
-        showToastButton.addEventListener('click', function (event) {
-            'use strict';
-            var data = { message: 'Update Settings {{ user.name }} - '+ item +' (' + ++counter + ')' };
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
-
-            var str = $("#"+item+"-update-form").serialize();
-            event.preventDefault();
-            $.post("{{ url_for('admin_bp.update_settings') }}", { str })
-                .done(function (data) {
-                    // console.log("Response Was: " + data);
-                });
-        });
-    });
-    }());
-
-</script>
-
-
-<script>
-
-</script>
+    <script>
+    {% include('js/admin_settings.js') %}
+    </script>
 {% endblock %}

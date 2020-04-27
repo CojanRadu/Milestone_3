@@ -37,7 +37,6 @@ def edit_user_settings(user_id):
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     return render_template('show_settings.html', user=user,  ex=ex_types)    
 
-
 @admin_bp.route('/delete_user', methods=['POST'])
 def delete_user():
     mongo.db.users.remove({'_id': ObjectId(request.form['user_id'])})
@@ -110,5 +109,4 @@ def update_settings():
 
     mongo.db.users.update_one(myquery, new_values)
 
-    #return str(new_values)  
     return('Update OK')

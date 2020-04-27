@@ -3,6 +3,8 @@ import json
 from types import SimpleNamespace
 from collections import namedtuple
 
+
+""" separate function mainly for testing import from external files """
 def make_exercise(action, user):
     use_nr = []
     checkbox_options = []
@@ -64,8 +66,6 @@ def make_exercise(action, user):
     elif action == 'divide':   
         c = int(a)*int(b)   
         checkbox_options = [x for x in options]
-        print(str(options))
-        print(user['exercise'][action]['opt_answer_type'])
         for n in range(1,13):
             if (c % n == 0):
                 all_hint.append(str(c) + ' / ' + str(n) + ' = ' + str(int(c / n)))

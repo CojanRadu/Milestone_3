@@ -4,7 +4,6 @@ from bson.objectid import ObjectId
 from database import mongo
 import uuid
 
-""" TODO move back some functionality like datetime """ 
 
 login_bp = Blueprint('login_bp', __name__,
     template_folder='templates',

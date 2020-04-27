@@ -35,9 +35,7 @@ def add_point():
     myquery = {'_id': ObjectId(user)}
     newvalues = {'$inc': { 'points' : +1 } }
     mongo.db.users.update_one(myquery, newvalues)
-
     return 'Add Point'
-
 
 @exercise_bp.route('/submit_answer', methods=['POST', 'GET'])
 def submit_answer():
@@ -57,9 +55,9 @@ def submit_answer():
                     'answer': int(json_form['answer']), 'is_correct': is_correct, 'nr_of_tries': int(json_form['ex_retry']), 'used_hint': is_hint,
                     'exercise_nr': int(json_form['ex_curr_nr']), 'total_exercise': int(json_form['total_exercise'])
                     }
-
     mongo.db.exercise.insert_one(exercise_doc)
 
+    """ return url for shimple stats if its the last exercise """
     if ((int(json_form['ex_curr_nr'])) - 1 == int(json_form['total_exercise']) and (int(json_form['total_exercise']) > 0)):
         return jsonify(dict(redirect=url_for('exercise_bp.show_simple_stat', username=session["u_name"], ex_type = json_form['ex_type']))) 
     else:

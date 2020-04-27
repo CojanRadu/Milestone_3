@@ -2,7 +2,6 @@
 {% set cnt = namespace(value=0) %}
 {% block content %}
 <div class="mdl-grid ui-tables">
-
     <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
         <div class="mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
@@ -35,8 +34,6 @@
                             <td class="mdl-data-table__cell--non-numeric">{{ user.points }}</td>
                             <td class="mdl-data-table__cell">Add</td>
                             <td class="mdl-data-table__cell--non-numeric">
-
-                                
                                 {% if (user.exercise.add.opt_enabled) %}
                                 <span class="label label--mini background-color--primary">Enabled</span>
                                 {% else %}
@@ -51,7 +48,6 @@
                                 <span class="label label--mini color--dark-gray">{{ mult }}</span>
                                 {% endif %}
                                 {% endfor %}
-
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">Ok</td>
                             <td class="mdl-data-table__cell--non-numeric">
@@ -62,7 +58,6 @@
                             </td>
                             <td class="mdl-data-table__cell--non-numeric"></td>
                         </tr>
-                        
                         <tr>
                             <td class="mdl-data-table__cell--non-numeric" colspan="5">
                                 {% if user.name != 'admin' %}
@@ -178,34 +173,9 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.left_menu_link').toggleClass('mdl-navigation__link--current');
-        
-        $('.del-user').click(function() {
-            $(this).closest("tr")
-                .children('td, th')
-                .animate({ margin: 0, padding: '12px 0px' })
-                .wrapInner('<div />')
-                .children()
-                .slideUp(function () { $(this).closest('tr').remove();
-            });
-            for (i = 1; i<=3; i++) {
-            $('#remove'+i+$(this).attr('id'))
-                .children('td, th')
-                .animate({ margin: 0, padding: '12px 0px' })
-                .wrapInner('<div />')
-                .children()
-                .slideUp(function () {  $('#remove'+i+$(this).attr('id'));
-            });
-            $('#remove'+i+$(this).attr('id')).remove();
-        }
-           $.post("{{ url_for('admin_bp.delete_user') }}", { user_id: $(this).attr('id') })
-            .done(function (data) {
-                //  console.log("Delete Response Was: " + data);
-            });
-        })
-})
-</script>
+    <script>
+    {% include('js/admin_users.js') %}
+    </script>
 {% endblock %}
