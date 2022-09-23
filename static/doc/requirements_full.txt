@@ -31,7 +31,7 @@ onboard==1.4.1
 PAM==0.4.2
 pexpect==4.2.1
 Pillow==5.1.0
-protobuf==3.0.0
+protobuf==3.18.3
 psutil==5.4.2
 pycairo==1.16.2
 pycodestyle==2.5.0
